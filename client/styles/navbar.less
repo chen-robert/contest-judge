@@ -1,0 +1,38 @@
+.navbar{  
+  width: 100vw;
+
+  padding: 50px;  
+  display: flex;
+  
+  @media only screen and (max-width: @mobile-breakpoint) {
+    padding: 50px 0;
+    justify-content: space-around;
+  }
+}
+
+.navbar--link{
+  margin: 0 50px;
+  text-decoration: none;
+  font-size: 1.3rem;
+  color: #444;
+  position: relative;
+  
+  &:before{
+    content: "";
+    position: absolute;
+    bottom: 50%;
+    left: 110%;
+    background-color: @theme-color;
+    
+    height: 3px;
+    width: 0;
+    transition: all @quick-animation-duration;
+  }
+  
+  &:hover:before {
+    width: 120%;
+    left: -10%;
+    transition: width @quick-animation-duration;
+  }
+}
+
