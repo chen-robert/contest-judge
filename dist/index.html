@@ -9,6 +9,12 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' localhost:* ws://localhost:*; font-src 'self' data:; script-src 'self'; object-src 'none';">
   </head>
   <body>
-    
+    <div class="login">
+      <form action="/login" method="POST">
+        <input class="login--input" placeholder="Username"></input>
+        <input class="login--input" placeholder="Password"></input>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
   </body>
 </html>
