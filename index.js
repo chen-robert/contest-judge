@@ -4,7 +4,15 @@ const compression = require("compression");
 const enforce = require('express-sslify');
 const problemData = require(__dirname + "/server/problemData").loadProblems(__dirname + "/problems");
 
+const session = require("express-session");
 const app = express();
+app.set("trust proxy", 1);
+app.use(session({
+  secret: process.env.SECRET || "aria is nice :thinking:",
+  resave: false,
+  saveUninitialized: true
+}));
+
 const PORT = process.env.PORT || 3000;
 
 app.use(compression());
