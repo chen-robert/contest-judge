@@ -1,4 +1,5 @@
 const fs = require("fs");
+const {startGrading, finishGrading, getSolves} = require("./db");
 const request = require("request");
 const router = require("express").Router();
 const upload = require("multer")({ dest: "uploads/" });
@@ -30,6 +31,12 @@ const status = (camisoleBody, expected) => {
 
 
 module.exports = problems => {
+  router.get("/", (req, res) => {
+    getSolves(rows => {
+      console.log(rows);
+    });
+    res.send("");
+  });
   router.post("/submit", upload.single("file"), (req, res) => {
     const data = fs.readFileSync(req.file.path, "utf8");
     const tests = problems[req.body.pid];
@@ -37,6 +44,8 @@ module.exports = problems => {
     for(let i = 0; i < tests.length; i++){
       expected[tests[i].name] = tests[i].stdout;
     }
+    
+    const time = startGrading(req.session.uid, req.body.pid);
     
     request({
       method: "POST",
@@ -50,7 +59,7 @@ module.exports = problems => {
       json: true,
       url: `http://${api}/run`
     }, (err, response, body) => {
-      res.send(status(body, expected));
+      finishGrading(req.session.uid, time, req.body.pid, status(body, expected));
     });
   });
   return router;

@@ -60,5 +60,33 @@ module.exports = {
         return callback(null, { id: data.id });
       })
       .catch(err => handleError(err, callback));
+  },
+  startGrading: (uid, problem) => {
+    const time = new Date().getTime();
+    client.query(
+      `
+      INSERT INTO solves
+      (user_id, problem, status, time) 
+      VALUES($1, $2, $3, $4)
+      `,
+      [uid, problem, "GRADING", time]
+    );
+    return time;
+  },
+  finishGrading: (uid, time, problem, status) => {
+    client.query(
+      `
+      UPDATE solves
+      SET status = $1
+      WHERE user_id = $2 AND problem = $3 AND time = $4
+      `,
+      [status, uid, problem, time]
+    );
+  },
+  getSolves: (callback) => {
+     client
+      .query("SELECT * FROM solves")
+      .then(res => callback(res.rows))
+      .catch(err => handleError(err, callback));
   }
 }

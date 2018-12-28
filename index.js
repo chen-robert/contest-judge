@@ -25,7 +25,7 @@ app.get("/login", (req, res) => res.sendFile(__dirname + "/dist/login.html"));
 app.post("/login", (req, res) => {
   checkLogin(req.body.username, req.body.password, (err, data) => {
     if(err){ return res.redirect("/login");}
-    req.session.uid = data.uid;
+    req.session.uid = data.id;
     req.session.username = req.body.username;
     res.redirect("/");
   });
@@ -40,7 +40,7 @@ app.post("/addUser", (req, res) => addUser(req.body.username, req.body.username 
 
 app.use("/grader", require("./server/grader.js")(fullProblemData));
 
-//app.use(enforceLogin);
+app.use(enforceLogin);
 
 const PORT = process.env.PORT || 3000;
 
