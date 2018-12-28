@@ -5,18 +5,44 @@
 .login{
   width: 100vw;
   height: 100vh;
-  
+}
+
+.form{  
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.login--input{
+.form--input{
   display: block;
-  padding: 15px;
+  padding: 10px;
+  outline: 0;
+  border: solid 1px #e5e5e5;
+  background: white;
   margin: 25px;
 }
 
+.form--button{
+  display: block;
+  padding: 10px 15px; 
+  margin: 10px;
+  background: @theme-color; 
+  border: 0; 
+  color: white;
+  cursor: pointer;
+}
+
+.form--button__align-right{
+  float: right;
+}
+
+/* Clear yellow background for input fields */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+}
 
 * {
   box-sizing: border-box;

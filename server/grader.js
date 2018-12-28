@@ -33,9 +33,8 @@ const status = (camisoleBody, expected) => {
 module.exports = problems => {
   router.get("/", (req, res) => {
     getSolves(rows => {
-      console.log(rows);
+      res.send(rows);
     });
-    res.send("");
   });
   router.post("/submit", upload.single("file"), (req, res) => {
     const data = fs.readFileSync(req.file.path, "utf8");
@@ -61,6 +60,8 @@ module.exports = problems => {
     }, (err, response, body) => {
       finishGrading(req.session.uid, time, req.body.pid, status(body, expected));
     });
+    
+    res.redirect("/");
   });
   return router;
 };

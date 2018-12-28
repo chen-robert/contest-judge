@@ -62,6 +62,7 @@ module.exports = {
       .catch(err => handleError(err, callback));
   },
   startGrading: (uid, problem) => {
+    console.log("User id " + uid);
     const time = new Date().getTime();
     client.query(
       `

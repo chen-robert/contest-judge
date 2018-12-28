@@ -9,11 +9,11 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' localhost:* ws://localhost:*; font-src 'self' data:; script-src 'self'; object-src 'none';">
   </head>
   <body>
-    <div class="login">
+    <div class="login form">
       <form action="/login" method="POST">
-        <input class="login--input" placeholder="Username" name="username"></input>
-        <input type="password" class="login--input" placeholder="Password" name="password"></input>
-        <button type="submit">Submit</button>
+        <input class="form--input" placeholder="Username" name="username"></input>
+        <input class="form--input" type="password" placeholder="Password" name="password"></input>
+        <button class="form--button form--button__align-right" type="submit">Login</button>
       </form>
     </div>
   </body>
