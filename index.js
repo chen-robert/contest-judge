@@ -2,16 +2,45 @@ const express = require("express");
 const path = require("path");
 const compression = require("compression");
 const enforce = require('express-sslify');
-const problemData = require(__dirname + "/server/problemData").loadProblems(__dirname + "/problems");
+const problemData = require("./server/problemData").loadProblems(__dirname + "/problems");
+const fullProblemData = require("./server/problemData").loadFullProblemData(__dirname + "/problems");
+const {addUser, checkLogin} = require("./server/db");
+const enforceLogin = require("./server/enforceLogin.js");
 
 const session = require("express-session");
 const app = express();
+
+const bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({extended: false}));
 app.set("trust proxy", 1);
 app.use(session({
   secret: process.env.SECRET || "aria is nice :thinking:",
   resave: false,
   saveUninitialized: true
 }));
+
+
+
+app.get("/login", (req, res) => res.sendFile(__dirname + "/dist/login.html"));
+app.post("/login", (req, res) => {
+  checkLogin(req.body.username, req.body.password, (err, data) => {
+    if(err){ return res.redirect("/login");}
+    req.session.uid = data.uid;
+    req.session.username = req.body.username;
+    res.redirect("/");
+  });
+});
+
+
+app.get("/bundle.js", (req, res) => res.sendFile(__dirname + "/dist/bundle.js"));
+
+
+app.get("/admin", (req, res) => res.sendFile(__dirname + "/dist/admin.html"));
+app.post("/addUser", (req, res) => addUser(req.body.username, req.body.username + "@gmail.com", req.body.password, () => res.redirect("/admin")));
+
+app.use("/grader", require("./server/grader.js")(fullProblemData));
+
+//app.use(enforceLogin);
 
 const PORT = process.env.PORT || 3000;
 
@@ -24,4 +53,5 @@ if(process.env.NODE_ENV === "production"){
 app.get("/problems", (req, res) => res.send(problemData));
 
 app.use(express.static(path.join(__dirname, "dist")));
+app.get("*", (req, res) => res.redirect("/"));
 app.listen(PORT, () => console.log(`Started server at port ${PORT}`));

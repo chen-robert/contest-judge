@@ -24,7 +24,9 @@ $.get("/problems")
       $problemElem.hide();
       
       const $listElem = $(problemList(problem.name)).appendTo("#problem-list");
-      $listElem.click(() => {
+      $listElem.click(e => {
+        e.preventDefault();
+        
         $(".problem-statement").hide();
         $problemElem.show();
         $("#pid").val(problem.name);

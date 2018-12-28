@@ -21,12 +21,17 @@
       <div id="problem-list" class="problem-list"></div>
       <div id="problems">
       </div>
-      <form class="problem-submit" action="/submit">
+      <form class="problem-submit" action="/grader/submit" method="POST" enctype="multipart/form-data">
         <div>
-          <input id="pid" style="display: none;" name="pid" value="123"></input>
+          <input id="pid" style="display: none;" name="pid"></input>
         </div>
         <div>
-          <input type="file"></input>
+          <select name="lang">
+            <option value="java">Java</option>
+          </select>
+        </div>
+        <div>
+          <input type="file" name="file"></input>
         </div>
         <div>
           <button type="submit">Submit</button>        

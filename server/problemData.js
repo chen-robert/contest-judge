@@ -18,5 +18,26 @@ module.exports = {
       ret.push(problemData);
     });
     return ret;
+  },
+  loadFullProblemData: dir => {
+    const ret = {};
+    fs.readdirSync(dir).forEach(file => {
+      const problemDir = dir + "/" + file;
+      
+      const tests = [];
+      let i = 0;
+      while(fs.existsSync(`${problemDir}/${i}.in`)){
+        tests.push({
+          name: `test_${i}`,
+          stdin: fs.readFileSync(`${problemDir}/${i}.in`).toString(),
+          stdout: fs.readFileSync(`${problemDir}/${i}.out`).toString()
+        });
+        
+        i++;
+      }
+      
+      ret[file] = tests;
+    });
+    return ret;
   }
 }
