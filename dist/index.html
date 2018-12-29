@@ -30,10 +30,27 @@
           <input class="form--button" type="file" name="file"></input>
           <button class="form--button form--button__align-right"type="submit">Submit</button>        
         </form>
+        <table class="submissions">
+          <thead>
+            <tr>
+              <th>Problem</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="submissions"></tbody>
+        </table>
       </div>
     </section>
-    <section class="scoreboard">
-      
+    <section class="scoreboard-section">
+      <table class="scoreboard">
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Score</th>
+            </tr>
+          </thead>
+          <tbody class="scoreboard--data" id="scoreboard"></tbody>
+        </table>
     </section>
   </body>
 </html>

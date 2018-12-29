@@ -9,7 +9,7 @@
     "build-dev": "webpack --watch",
     "dev": "run-p build-dev dev-server",
     "db:init": "node server/db/init.js",
-    "dev-server": "nodemon index.js",
+    "dev-server": "nodemon --watch index.js --watch server index.js",
     "heroku-postbuild": "npm run build",
     "format": "prettier \"src/**/*\" --write",
     "start": "node index.js"

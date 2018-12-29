@@ -38,9 +38,9 @@ app.get("/bundle.js", (req, res) => res.sendFile(__dirname + "/dist/bundle.js"))
 app.get("/admin", (req, res) => res.sendFile(__dirname + "/dist/admin.html"));
 app.post("/addUser", (req, res) => addUser(req.body.username, req.body.username + "@gmail.com", req.body.password, () => res.redirect("/admin")));
 
-app.use("/grader", require("./server/grader.js")(fullProblemData));
-
 app.use(enforceLogin);
+
+app.use("/grader", require("./server/grader.js")(fullProblemData));
 
 const PORT = process.env.PORT || 3000;
 

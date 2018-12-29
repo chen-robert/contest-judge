@@ -61,8 +61,13 @@ module.exports = {
       })
       .catch(err => handleError(err, callback));
   },
+  getUserData: (callback) => {
+     client
+      .query("SELECT * FROM users")
+      .then(res => callback(res.rows))
+      .catch(err => handleError(err, callback));
+  },
   startGrading: (uid, problem) => {
-    console.log("User id " + uid);
     const time = new Date().getTime();
     client.query(
       `

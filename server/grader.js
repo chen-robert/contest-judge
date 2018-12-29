@@ -1,5 +1,5 @@
 const fs = require("fs");
-const {startGrading, finishGrading, getSolves} = require("./db");
+const {startGrading, finishGrading, getSolves, getUserData} = require("./db");
 const request = require("request");
 const router = require("express").Router();
 const upload = require("multer")({ dest: "uploads/" });
@@ -32,10 +32,28 @@ const status = (camisoleBody, expected) => {
 
 module.exports = problems => {
   router.get("/", (req, res) => {
-    getSolves(rows => {
-      res.send(rows);
+    getUserData(data => {
+      const idToName = {};
+      data.forEach(user => idToName[user.id] = user.username);
+      
+      getSolves(rows => {
+        rows = rows.map(row => {
+          const data = {
+            uid: row.user_id,
+            username: idToName[row.user_id],
+            problem: row.problem,
+            status: row.status,
+            time: row.time
+          }
+          
+          return data;
+        });
+        
+        res.send(rows);
+      });
     });
   });
+  router.get("/user", (req, res) => res.send({uid: req.session.uid}));
   router.post("/submit", upload.single("file"), (req, res) => {
     const data = fs.readFileSync(req.file.path, "utf8");
     const tests = problems[req.body.pid];
