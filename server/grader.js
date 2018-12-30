@@ -2,7 +2,13 @@ const fs = require("fs");
 const {startGrading, finishGrading, getSolves, getUserData} = require("./db");
 const request = require("request");
 const router = require("express").Router();
-const upload = require("multer")({ dest: "uploads/" });
+const upload = require("multer")
+({ 
+  dest: "uploads/",
+  limits: {
+    fileSize: 30 * 1000
+  }
+});
 
 const api = process.env.CAMISOLE;
 
@@ -65,7 +71,12 @@ module.exports = problems => {
     });
   });
   router.get("/user", (req, res) => res.send({uid: req.session.uid}));
-  router.post("/submit", upload.single("file"), (req, res) => {
+  router.post("/submit", (req, res, next) => {
+    upload.single("file")(req, res, err => {
+      if(err) res.redirect("/");
+      next();
+    });
+  }, (req, res) => {
     const tests = problems[req.body.pid];
     
     if(tests === undefined || req.file === undefined) return res.redirect("/");
