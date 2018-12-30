@@ -33,6 +33,9 @@ const status = (camisoleBody, expected) => {
     }
   }
   
+  if(!camisoleBody.success){
+    return "GRADER_ERROR";
+  }
   if(camisoleBody.tests){
     for(let i = 0; i < camisoleBody.tests.length; i++){
       const currTest = camisoleBody.tests[i];
@@ -40,7 +43,7 @@ const status = (camisoleBody, expected) => {
       if(!compare(currTest.stdout, expected[currTest.name])) return "WA";
     }
   }else{
-    return "GRADER_ERROR";
+    return "UNKNOWN_ERROR";
   }
   
   return "OK";
