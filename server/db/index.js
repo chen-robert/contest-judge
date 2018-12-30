@@ -7,7 +7,7 @@ client.connect();
 
 const handleError = (err, callback) => {
   console.error(err);
-  callback("Unknown error");
+  callback(err);
 };
 module.exports = {
  addUser: (name, email, password, callback) => {
@@ -15,17 +15,14 @@ module.exports = {
       .query("SELECT * FROM users WHERE username = $1", [name])
       .then(res => {
         if (res.rows.length > 0) {
-          return callback("Username already exists");
+          throw "Username already exists";
         }
         return client.query("SELECT * FROM users WHERE email = $1", [email]);
       })
-      .then(res => {
-        if(!res)return;
-        
+      .then(res => {        
         if (res.rows.length > 0) {
-          return callback("Email already exists");
+          throw "Email already exists";
         }
-
         return bcrypt.hash(password, 10);
       })
       .then(hash =>{

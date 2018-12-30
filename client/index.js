@@ -31,6 +31,46 @@ const scoreboardItem = ({username, score}) => `
 </tr>
 `
 $(() => {
+  $("form").submit(function(e) {
+    e.preventDefault();
+    
+    const displayMessage = message => {
+      const popup = `
+      <div class="error">${message}</div>
+      `
+      
+      $(popup).appendTo(document.body).hide().fadeIn().delay(2000).fadeOut(function(){$(this).remove()});
+    }
+    
+    const success = data => {
+      if(data.error) {
+        displayMessage(data.error);
+      }
+      if(data.message) {
+        displayMessage(data.message);
+      }
+      if(data.redirect) window.location = data.redirect;
+    }
+    
+    if($(this).find("input[type=file]").length == 0){
+      $.ajax({
+        url: this.action,
+        type: this.method,
+        data: $(this).serialize(),
+        success
+      });
+    }else{
+      $.ajax({
+        url: this.action,
+        type: this.method,
+        data: new FormData(this),
+        cache: false,
+        contentType: false,
+        processData: false,
+        success
+      });
+    }
+  });
   if(window.location.pathname === "/"){
     $.get("/problems")
       .then(data => {
@@ -77,17 +117,22 @@ $(() => {
                 .map(sub => sub.uid)
                 .filter(isUnique);
                 
-              const calculateScore = uid => {
+              const calculateScore = uid => {                  
+                const correctTimes = {};
+                subs
+                  .filter(sub => sub.status === "OK")
+                  .sort((a, b) => a.time - b.time)
+                  .forEach(sub => {
+                    if(correctTimes[sub.problem] == undefined){
+                      correctTimes[sub.problem] = sub.time;
+                    }
+                  });
+                const correct = Object.keys(correctTimes).length;
+                
                 const incorrect = subs
                   .filter(sub => sub.uid === uid)
-                  .filter(sub => sub.status !== "OK")
-                  .length;
-                  
-                const correct = subs
-                  .filter(sub => sub.uid === uid)
-                  .filter(sub => sub.status === "OK")
-                  .map(sub => sub.problem)
-                  .filter(isUnique)
+                  .filter(sub => sub.status !== "OK" && sub.status !== "GRADING")
+                  .filter(sub => correctTimes[sub.problem] === undefined || sub.time < correctTimes[sub.problem])
                   .length;
                   
                   return {

@@ -24,10 +24,10 @@ app.use(session({
 app.get("/login", (req, res) => res.sendFile(__dirname + "/dist/login.html"));
 app.post("/login", (req, res) => {
   checkLogin(req.body.username, req.body.password, (err, data) => {
-    if(err){ return res.redirect("/login");}
+    if(err) return res.send({error: err});
     req.session.uid = data.id;
     req.session.username = req.body.username;
-    res.redirect("/");
+    return res.send({redirect: "/"});
   });
 });
 
@@ -36,7 +36,14 @@ app.get("/bundle.js", (req, res) => res.sendFile(__dirname + "/dist/bundle.js"))
 
 
 app.get("/admin", (req, res) => res.sendFile(__dirname + "/dist/admin.html"));
-app.post("/addUser", (req, res) => addUser(req.body.username, req.body.username + "@gmail.com", req.body.password, () => res.redirect("/admin")));
+app.post("/addUser", (req, res) => {
+  addUser(req.body.username, req.body.username + "@gmail.com", req.body.password, 
+    (err) => {
+      if(err) return res.send({error: err});
+      res.send({message: `User ${req.body.username} created`});
+    }
+  )
+});
 
 app.use(enforceLogin);
 

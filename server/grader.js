@@ -76,13 +76,14 @@ module.exports = problems => {
   router.get("/user", (req, res) => res.send({uid: req.session.uid}));
   router.post("/submit", (req, res, next) => {
     upload.single("file")(req, res, err => {
-      if(err) res.redirect("/");
+      if(err) return res.send({error: "Invalid file"});
       next();
     });
   }, (req, res) => {
     const tests = problems[req.body.pid];
     
-    if(tests === undefined || req.file === undefined) return res.redirect("/");
+    if(req.file === undefined) return res.send({error: "Please upload a file"});
+    if(tests === undefined) return res.send({error: "Unknown error"});
     
     const data = fs.readFileSync(req.file.path, "utf8");
     const expected = {};
@@ -107,7 +108,7 @@ module.exports = problems => {
       finishGrading(req.session.uid, time, req.body.pid, status(body, expected));
     });
     
-    res.redirect("/");
+    res.send({message: "Successfully submitted"});
   });
   return router;
 };
