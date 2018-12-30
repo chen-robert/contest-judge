@@ -3,18 +3,18 @@
 @import "problems";
 @import "scoreboard";
 
-.login{
+.login {
   width: 100vw;
   height: 100vh;
 }
 
-.form{  
+.form {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.form--input{
+.form--input {
   display: block;
   padding: 10px;
   outline: 0;
@@ -23,30 +23,28 @@
   margin: 25px;
 }
 
-.form--button{
+.form--button {
   display: block;
-  padding: 10px 15px; 
+  padding: 10px 15px;
   margin: 10px;
-  background: @theme-color; 
-  border: 0; 
+  background: @theme-color;
+  border: 0;
   color: white;
   cursor: pointer;
 }
 
-.form--button__align-right{
+.form--button__align-right {
   float: right;
 }
 
-.error{
+.error {
   position: absolute;
   top: 25px;
   width: 100%;
-  
+
   text-align: center;
   background-color: #eee;
   padding: 25px;
-  
-  
 }
 
 /* Clear yellow background for input fields */
@@ -54,7 +52,7 @@ input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-    transition: background-color 5000s ease-in-out 0s;
+  transition: background-color 5000s ease-in-out 0s;
 }
 
 * {

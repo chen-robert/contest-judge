@@ -11,7 +11,7 @@
     "db:init": "node server/db/init.js",
     "dev-server": "nodemon --watch index.js --watch server index.js",
     "heroku-postbuild": "npm run build",
-    "format": "prettier \"src/**/*\" --write",
+    "format": "prettier \"**/*.{js,less,html}\" --write",
     "start": "node index.js"
   },
   "author": "Robert Chen",

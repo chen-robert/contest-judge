@@ -3,17 +3,23 @@
   <head>
     <title>Programming Judge</title>
     <script src="bundle.js"></script>
-    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="og:type" content="website">
-    <meta name="og:site_name" content="Programming Judge">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' localhost:* ws://localhost:*; font-src 'self' data:; script-src 'self'; object-src 'none';">
+    <meta
+      name="viewport"
+      content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0"
+    />
+    <meta name="og:type" content="website" />
+    <meta name="og:site_name" content="Programming Judge" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self' localhost:* ws://localhost:*; font-src 'self' data:; script-src 'self'; object-src 'none';"
+    />
   </head>
   <body>
     <div class="login">
       <form action="/addUser" method="POST">
         <h1>Add User</h1>
-        <input class="login--input" placeholder="Username" name="username"></input>
-        <input class="login--input" placeholder="Password" name="password"></input>
+        <input class="login--input" placeholder="Username" name="username" />
+        <input class="login--input" placeholder="Password" name="password" />
         <button type="submit">Submit</button>
       </form>
     </div>

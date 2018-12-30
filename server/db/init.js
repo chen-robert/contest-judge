@@ -1,4 +1,4 @@
-const {Client} = require("pg");
+const { Client } = require("pg");
 const async = require("async");
 const { connectionString } = require("./config");
 

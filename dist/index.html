@@ -3,35 +3,42 @@
   <head>
     <title>Programming Judge</title>
     <script src="bundle.js"></script>
-    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="og:type" content="website">
-    <meta name="og:site_name" content="Programming Judge">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' localhost:* ws://localhost:*; font-src 'self' data:; script-src 'self'; object-src 'none'; style-src 'self' 'unsafe-inline'">
+    <meta
+      name="viewport"
+      content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0"
+    />
+    <meta name="og:type" content="website" />
+    <meta name="og:site_name" content="Programming Judge" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self' localhost:* ws://localhost:*; font-src 'self' data:; script-src 'self'; object-src 'none'; style-src 'self' 'unsafe-inline'"
+    />
   </head>
   <body>
     <nav class="navbar">
-      <a class="navbar--link">
-        Problems
-      </a>
-      <a class="navbar--link">
-        Scoreboard
-      </a>
+      <a class="navbar--link"> Problems </a>
+      <a class="navbar--link"> Scoreboard </a>
     </nav>
     <section class="problem">
       <div id="problem-list" class="problem-list"></div>
-      <div id="problems">
-      </div>
+      <div id="problems"></div>
       <div class="problem-submit form">
-        <form action="/grader/submit" method="POST" enctype="multipart/form-data">
-          <input id="pid" style="display: none;" name="pid"></input>
+        <form
+          action="/grader/submit"
+          method="POST"
+          enctype="multipart/form-data"
+        >
+          <input id="pid" style="display: none;" name="pid" />
           <select class="form--button" name="lang">
             <option value="java">Java</option>
             <option value="c">C</option>
             <option value="c++">C++</option>
             <option value="python">Python 3</option>
           </select>
-          <input class="form--button" type="file" name="file"></input>
-          <button class="form--button form--button__align-right"type="submit">Submit</button>        
+          <input class="form--button" type="file" name="file" />
+          <button class="form--button form--button__align-right" type="submit">
+            Submit
+          </button>
         </form>
         <table class="submissions">
           <thead>
@@ -46,14 +53,14 @@
     </section>
     <section class="scoreboard-section">
       <table class="scoreboard">
-          <thead>
-            <tr>
-              <th>User</th>
-              <th>Score</th>
-            </tr>
-          </thead>
-          <tbody class="scoreboard--data" id="scoreboard"></tbody>
-        </table>
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Score</th>
+          </tr>
+        </thead>
+        <tbody class="scoreboard--data" id="scoreboard"></tbody>
+      </table>
     </section>
   </body>
 </html>

@@ -1,4 +1,4 @@
-const {Client} = require("pg");
+const { Client } = require("pg");
 const bcrypt = require("bcryptjs");
 const { connectionString } = require("./config");
 
@@ -10,7 +10,7 @@ const handleError = (err, callback) => {
   callback(err);
 };
 module.exports = {
- addUser: (name, email, password, callback) => {
+  addUser: (name, email, password, callback) => {
     client
       .query("SELECT * FROM users WHERE username = $1", [name])
       .then(res => {
@@ -19,19 +19,18 @@ module.exports = {
         }
         return client.query("SELECT * FROM users WHERE email = $1", [email]);
       })
-      .then(res => {        
+      .then(res => {
         if (res.rows.length > 0) {
           throw "Email already exists";
         }
         return bcrypt.hash(password, 10);
       })
-      .then(hash =>{
+      .then(hash => {
         client.query(
           "INSERT INTO users(username, email, password) VALUES($1, $2, $3) RETURNING *",
           [name, email, hash]
-        )
-      }
-      )
+        );
+      })
       .then(() => callback())
       .catch(err => handleError(err, callback));
   },
@@ -58,8 +57,8 @@ module.exports = {
       })
       .catch(err => handleError(err, callback));
   },
-  getUserData: (callback) => {
-     client
+  getUserData: callback => {
+    client
       .query("SELECT * FROM users")
       .then(res => callback(res.rows))
       .catch(err => handleError(err, callback));
@@ -86,10 +85,10 @@ module.exports = {
       [status, uid, problem, time]
     );
   },
-  getSolves: (callback) => {
-     client
+  getSolves: callback => {
+    client
       .query("SELECT * FROM solves")
       .then(res => callback(res.rows))
       .catch(err => handleError(err, callback));
   }
-}
+};
