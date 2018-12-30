@@ -21,11 +21,22 @@ const compare = (a, b) => {
 }
 
 const status = (camisoleBody, expected) => {
-  for(let i = 0; i < camisoleBody.tests.length; i++){
-    const currTest = camisoleBody.tests[i];
-    if(currTest.meta.status !== "OK") return currTest.meta.status;
-    if(!compare(currTest.stdout, expected[currTest.name])) return "WA";
+  if(camisoleBody.compile){
+    if(camisoleBody.compile.exitcode !== 0){
+      return "COMPILE_ERROR";
+    }
   }
+  
+  if(camisoleBody.tests){
+    for(let i = 0; i < camisoleBody.tests.length; i++){
+      const currTest = camisoleBody.tests[i];
+      if(currTest.meta.status !== "OK") return currTest.meta.status;
+      if(!compare(currTest.stdout, expected[currTest.name])) return "WA";
+    }
+  }else{
+    return "GRADER_ERROR";
+  }
+  
   return "OK";
 }
 
@@ -55,8 +66,11 @@ module.exports = problems => {
   });
   router.get("/user", (req, res) => res.send({uid: req.session.uid}));
   router.post("/submit", upload.single("file"), (req, res) => {
-    const data = fs.readFileSync(req.file.path, "utf8");
     const tests = problems[req.body.pid];
+    
+    if(tests === undefined || req.file === undefined) return res.redirect("/");
+    
+    const data = fs.readFileSync(req.file.path, "utf8");
     const expected = {};
     for(let i = 0; i < tests.length; i++){
       expected[tests[i].name] = tests[i].stdout;
