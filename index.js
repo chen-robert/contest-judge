@@ -5,7 +5,7 @@ const enforce = require("express-sslify");
 const problemData = require("./server/problemData").loadProblems(
   __dirname + "/problems"
 );
-const fullProblemData = () => require("./server/problemData").loadFullProblemData(
+const fullProblemData = require("./server/problemData").loadFullProblemData(
   __dirname + "/problems"
 );
 const { addUser, checkLogin } = require("./server/db");
@@ -54,7 +54,7 @@ app.post("/addUser", (req, res) => {
 
 app.use(enforceLogin);
 
-app.use("/grader", require("./server/grader.js")(fullProblemData()));
+app.use("/grader", require("./server/grader.js")(fullProblemData));
 
 const PORT = process.env.PORT || 3000;
 
