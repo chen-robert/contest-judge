@@ -1,10 +1,10 @@
 global.__rootdir = __dirname;
 
-const express = require("express");
+const PORT = process.env.PORT || 3000;
 const config = require(__dirname + "/config.js");
-const path = require("path");
-const compression = require("compression");
-const enforce = require("express-sslify");
+
+const express = require("express");
+
 const {
   problemData,
   fullProblemData
@@ -18,7 +18,6 @@ const app = express();
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
-app.set("trust proxy", 1);
 app.use(
   session({
     secret: process.env.SECRET || "aria is nice :thinking:",
@@ -60,15 +59,9 @@ app.use(enforceLogin);
 
 app.use("/grader", require("./server/grader.js")(fullProblemData));
 
-const PORT = process.env.PORT || 3000;
 
-app.use(compression());
-if (process.env.NODE_ENV === "production") {
-  app.use(enforce.HTTPS({ trustProtoHeader: true }));
-  console.log(process.env.NODE_ENV);
-}
 
 app.get("/problems", (req, res) => res.send(problemData));
 
-app.use(express.static(path.join(__dirname, "dist")));
+app.use(express.static(__dirname + "/dist"));
 app.listen(PORT, () => console.log(`Started server at port ${PORT}`));
