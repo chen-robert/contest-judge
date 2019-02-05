@@ -10,12 +10,12 @@ const session = require("express-session");
 
 // Server
 const {
-  problemData,
   fullProblemData
 } = require("./server/problemData").loadProblems(__dirname + "/problems");
 const { addUser } = require(__rootdir + "/server/db");
 const enforceLogin = require(__rootdir + "/server/enforceLogin.js");
 
+// Express app
 const app = express();
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -27,11 +27,10 @@ app.use(
   })
 );
 
-app.use("/login", require(__rootdir + "/server/login.js"));
-app.use("/grader", require("./server/grader.js")(fullProblemData));
+// Public routes
+app.use("/login", require(__rootdir + "/server/routes/login.js"));
 
 app.get("/admin", (req, res) => res.sendFile(__dirname + "/dist/admin.html"));
-
 app.post("/addUser", (req, res) => {
   addUser(
     req.body.username,
@@ -44,9 +43,11 @@ app.post("/addUser", (req, res) => {
   );
 });
 
+// Private routes
 app.use(enforceLogin);
 app.get("/config", (req, res) => res.send(config));
-app.get("/problems", (req, res) => res.send(problemData));
-
+app.use("/problems", require(__rootdir + "/server/routes/problems.js"));
+app.use("/grader", require(__rootdir + "/server/routes/grader.js")(fullProblemData));
 app.use(express.static(__dirname + "/dist", { extensions: ["html"] }));
+
 app.listen(PORT, () => console.log(`Started server at port ${PORT}`));

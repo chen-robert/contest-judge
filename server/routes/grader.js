@@ -1,5 +1,5 @@
 const fs = require("fs");
-const { startGrading, finishGrading, getSolves, getUserData } = require("./db");
+const { startGrading, finishGrading, getSolves, getUserData } = require(__rootdir + "/server/db");
 const request = require("request");
 const router = require("express").Router();
 const upload = require("multer")({
