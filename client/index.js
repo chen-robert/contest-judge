@@ -1,3 +1,5 @@
+import marked from "marked";
+
 import "./styles/main.less";
 
 import "./navbar.js";
@@ -15,7 +17,7 @@ const problemList = name => `
 const problemStatement = ({ name, statement, sampleIn, sampleOut }) => `
 <div class="problem-statement">
   <div class="problem--title">${name}</div>
-  <div class="problem--text">${statement}</div>
+  <div class="problem--text">${marked(statement)}</div>
   <div class="problem--title problem--title__secondary">Sample Input</div>
   <div class="problem--text">${sampleIn}</div>
   <div class="problem--title problem--title__secondary">Sample Output</div>
@@ -46,3 +48,10 @@ $(() => {
     graderLoop(problemData);
   });
 });
+
+window.MathJax = {
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      }
