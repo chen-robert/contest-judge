@@ -23,6 +23,7 @@
     "babel-loader": "^8.0.4",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
+    "chart.js": "^2.7.3",
     "compression": "^1.7.3",
     "css-loader": "^2.1.0",
     "express": "^4.16.4",
