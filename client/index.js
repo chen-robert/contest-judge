@@ -1,4 +1,8 @@
 import "./styles/main.less";
+
+import "./navbar.js";
+import "./timer.js";
+
 import $ from "jquery";
 
 const problemList = name => `

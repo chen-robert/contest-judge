@@ -1,10 +1,14 @@
+global.__rootdir = __dirname;
+
 const express = require("express");
+const config = require(__dirname + "/config.js");
 const path = require("path");
 const compression = require("compression");
 const enforce = require("express-sslify");
-const {problemData, fullProblemData} = require("./server/problemData").loadProblems(
-  __dirname + "/problems"
-);
+const {
+  problemData,
+  fullProblemData
+} = require("./server/problemData").loadProblems(__dirname + "/problems");
 
 const { addUser, checkLogin } = require("./server/db");
 const enforceLogin = require("./server/enforceLogin.js");
@@ -24,6 +28,8 @@ app.use(
 );
 
 app.get("/login", (req, res) => res.sendFile(__dirname + "/dist/login.html"));
+app.get("/config", (req, res) => res.send(config));
+
 app.post("/login", (req, res) => {
   checkLogin(req.body.username, req.body.password, (err, data) => {
     if (err) return res.send({ error: err });
@@ -65,5 +71,4 @@ if (process.env.NODE_ENV === "production") {
 app.get("/problems", (req, res) => res.send(problemData));
 
 app.use(express.static(path.join(__dirname, "dist")));
-app.get("*", (req, res) => res.redirect("/"));
 app.listen(PORT, () => console.log(`Started server at port ${PORT}`));

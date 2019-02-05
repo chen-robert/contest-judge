@@ -2,7 +2,10 @@ const fs = require("fs");
 
 module.exports = {
   loadProblems: function(dir) {
-    return {problemData: this.loadClientProblems(dir), fullProblemData: this.loadFullProblemData(dir)};
+    return {
+      problemData: this.loadClientProblems(dir),
+      fullProblemData: this.loadFullProblemData(dir)
+    };
   },
   loadClientProblems: dir => {
     const ret = [];
