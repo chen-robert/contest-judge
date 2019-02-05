@@ -4,7 +4,10 @@ const autoprefixer = require("autoprefixer");
 
 module.exports = {
   mode: "development",
-  entry: [path.join(__dirname, "/client/index.js")],
+  entry: {
+    app: path.join(__dirname, "/client/index.js"),
+    login: path.join(__dirname, "/client/login.js")
+  },
   resolve: {
     modules: [path.resolve(__dirname, "src"), "node_modules"]
   },
@@ -40,7 +43,7 @@ module.exports = {
   },
   output: {
     path: __dirname + "/dist",
-    filename: "bundle.js"
+    filename: "[name].js"
   },
   devtool: "inline-source-map",
   devServer: {

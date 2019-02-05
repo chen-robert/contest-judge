@@ -1,21 +1,22 @@
 global.__rootdir = __dirname;
 
+// Config
 const PORT = process.env.PORT || 3000;
 const config = require(__dirname + "/config.js");
 
+// Express
 const express = require("express");
+const session = require("express-session");
 
+// Server
 const {
   problemData,
   fullProblemData
 } = require("./server/problemData").loadProblems(__dirname + "/problems");
+const { addUser } = require(__rootdir + "/server/db");
+const enforceLogin = require(__rootdir + "/server/enforceLogin.js");
 
-const { addUser, checkLogin } = require("./server/db");
-const enforceLogin = require("./server/enforceLogin.js");
-
-const session = require("express-session");
 const app = express();
-
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(
@@ -26,23 +27,11 @@ app.use(
   })
 );
 
-app.get("/login", (req, res) => res.sendFile(__dirname + "/dist/login.html"));
-app.get("/config", (req, res) => res.send(config));
-
-app.post("/login", (req, res) => {
-  checkLogin(req.body.username, req.body.password, (err, data) => {
-    if (err) return res.send({ error: err });
-    req.session.uid = data.id;
-    req.session.username = req.body.username;
-    return res.send({ redirect: "/" });
-  });
-});
-
-app.get("/bundle.js", (req, res) =>
-  res.sendFile(__dirname + "/dist/bundle.js")
-);
+app.use("/login", require(__rootdir + "/server/login.js"));
+app.use("/grader", require("./server/grader.js")(fullProblemData));
 
 app.get("/admin", (req, res) => res.sendFile(__dirname + "/dist/admin.html"));
+
 app.post("/addUser", (req, res) => {
   addUser(
     req.body.username,
@@ -55,13 +44,11 @@ app.post("/addUser", (req, res) => {
   );
 });
 
+
+
 app.use(enforceLogin);
-
-app.use("/grader", require("./server/grader.js")(fullProblemData));
-
-
-
+app.get("/config", (req, res) => res.send(config));
 app.get("/problems", (req, res) => res.send(problemData));
 
-app.use(express.static(__dirname + "/dist"));
+app.use(express.static(__dirname + "/dist", {extensions: ["html"]}));
 app.listen(PORT, () => console.log(`Started server at port ${PORT}`));
