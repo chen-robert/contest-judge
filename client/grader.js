@@ -43,6 +43,7 @@ const graderLoop = problemData => {
 
           const correctTimes = {};
           subs
+            .filter(sub => sub.uid === uid)
             .filter(sub => sub.status === "OK")
             .sort((a, b) => a.time - b.time)
             .forEach(sub => {
