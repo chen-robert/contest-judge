@@ -9,9 +9,9 @@ const express = require("express");
 const session = require("express-session");
 
 // Server
-const {
-  fullProblemData
-} = require("./server/problemData").loadProblems(__dirname + "/problems");
+const { fullProblemData } = require("./server/problemData").loadProblems(
+  __dirname + "/problems"
+);
 const { addUser } = require(__rootdir + "/server/db");
 const enforceLogin = require(__rootdir + "/server/enforceLogin.js");
 
@@ -47,7 +47,10 @@ app.post("/addUser", (req, res) => {
 app.use(enforceLogin);
 app.get("/config", (req, res) => res.send(config));
 app.use("/problems", require(__rootdir + "/server/routes/problems.js"));
-app.use("/grader", require(__rootdir + "/server/routes/grader.js")(fullProblemData));
+app.use(
+  "/grader",
+  require(__rootdir + "/server/routes/grader.js")(fullProblemData)
+);
 app.use(express.static(__dirname + "/dist", { extensions: ["html"] }));
 
 app.listen(PORT, () => console.log(`Started server at port ${PORT}`));

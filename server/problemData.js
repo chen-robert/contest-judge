@@ -12,11 +12,17 @@ module.exports = {
     const defaultConf = require(dir + "/default.json");
     fs.readdirSync(dir).forEach(file => {
       const problemDir = dir + "/" + file;
-      
-      if(!fs.lstatSync(problemDir).isDirectory()) return;
+
+      if (!fs.lstatSync(problemDir).isDirectory()) return;
 
       const statement = fs.readFileSync(problemDir + "/statement.txt", "utf8");
-      const config = Object.assign({}, defaultConf, fs.existsSync(problemDir + "/config.json")? require(problemDir + "/config.json"): {});
+      const config = Object.assign(
+        {},
+        defaultConf,
+        fs.existsSync(problemDir + "/config.json")
+          ? require(problemDir + "/config.json")
+          : {}
+      );
       const sampleIn = fs.readFileSync(problemDir + "/0.in", "utf8");
       const sampleOut = fs.readFileSync(problemDir + "/0.out", "utf8");
       const problemData = {
@@ -34,8 +40,8 @@ module.exports = {
     const ret = {};
     fs.readdirSync(dir).forEach(file => {
       const problemDir = dir + "/" + file;
-      
-      if(!fs.lstatSync(problemDir).isDirectory()) return;
+
+      if (!fs.lstatSync(problemDir).isDirectory()) return;
 
       const tests = [];
       let i = 0;
