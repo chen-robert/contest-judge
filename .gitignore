@@ -1,5 +1,14 @@
-node_modules
+# Node.js
+node_modules/
+v8-compile-cache-0/
+
+# Uploaded files
 uploads
+
+# HTML
 dist/*
 !dist/*.html
+
+# Problems
 problems/*
+!problems/Hello\ World
