@@ -44,11 +44,9 @@ app.post("/addUser", (req, res) => {
   );
 });
 
-
-
 app.use(enforceLogin);
 app.get("/config", (req, res) => res.send(config));
 app.get("/problems", (req, res) => res.send(problemData));
 
-app.use(express.static(__dirname + "/dist", {extensions: ["html"]}));
+app.use(express.static(__dirname + "/dist", { extensions: ["html"] }));
 app.listen(PORT, () => console.log(`Started server at port ${PORT}`));

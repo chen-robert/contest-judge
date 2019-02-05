@@ -45,9 +45,7 @@ $(() => {
         $problemElem.hide();
       }
 
-      const $listElem = $(problemList(problem.name)).appendTo(
-        "#problem-list"
-      );
+      const $listElem = $(problemList(problem.name)).appendTo("#problem-list");
       $listElem.click(e => {
         e.preventDefault();
 
