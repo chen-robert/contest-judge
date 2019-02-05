@@ -1,7 +1,10 @@
 const fs = require("fs");
 
 module.exports = {
-  loadProblems: dir => {
+  loadProblems: function(dir) {
+    return {problemData: this.loadClientProblems(dir), fullProblemData: this.loadFullProblemData(dir)};
+  },
+  loadClientProblems: dir => {
     const ret = [];
     fs.readdirSync(dir).forEach(file => {
       const problemDir = dir + "/" + file;

@@ -2,12 +2,10 @@ const express = require("express");
 const path = require("path");
 const compression = require("compression");
 const enforce = require("express-sslify");
-const problemData = require("./server/problemData").loadProblems(
+const {problemData, fullProblemData} = require("./server/problemData").loadProblems(
   __dirname + "/problems"
 );
-const fullProblemData = require("./server/problemData").loadFullProblemData(
-  __dirname + "/problems"
-);
+
 const { addUser, checkLogin } = require("./server/db");
 const enforceLogin = require("./server/enforceLogin.js");
 
