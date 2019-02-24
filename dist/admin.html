@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <title>Programming Judge</title>
-    <script src="bundle.js"></script>
+    <script src="admin.js"></script>
     <meta
       name="viewport"
       content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0"
@@ -15,13 +15,26 @@
     />
   </head>
   <body>
-    <div class="login">
-      <form action="/addUser" method="POST">
+    <div class="form">
+      <form action="/admin/addUser" method="POST">
         <h1>Add User</h1>
-        <input class="login--input" placeholder="Username" name="username" />
-        <input class="login--input" placeholder="Password" name="password" />
-        <button type="submit">Submit</button>
+        <input class="form--input" placeholder="Username" name="username" />
+        <input class="form--input" placeholder="Password" name="password" />
+        <select class="form--input" name="division">
+          <option value="beginner">Beginner</option>
+          <option value="advanced">Advanced</option>
+        </select>
+        <button class="form--button" type="submit">Submit</button>
       </form>
     </div>
+    <table class="submissions">
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Division</th>
+        </tr>
+      </thead>
+      <tbody id="users"></tbody>
+    </table>
   </body>
 </html>

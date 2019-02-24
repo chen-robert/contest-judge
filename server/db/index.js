@@ -10,7 +10,7 @@ const handleError = (err, callback) => {
   callback(err);
 };
 module.exports = {
-  addUser: (name, email, password, callback) => {
+  addUser: (name, email, password, division, callback) => {
     client
       .query("SELECT * FROM users WHERE username = $1", [name])
       .then(res => {
@@ -27,8 +27,8 @@ module.exports = {
       })
       .then(hash => {
         client.query(
-          "INSERT INTO users(username, email, password) VALUES($1, $2, $3) RETURNING *",
-          [name, email, hash]
+          "INSERT INTO users(username, email, password, division) VALUES($1, $2, $3, $4) RETURNING *",
+          [name, email, hash, division]
         );
       })
       .then(() => callback())

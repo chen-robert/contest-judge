@@ -6,7 +6,8 @@ module.exports = {
   mode: "development",
   entry: {
     app: path.join(__dirname, "/client/index.js"),
-    login: path.join(__dirname, "/client/login.js")
+    login: path.join(__dirname, "/client/login.js"),
+    admin: path.join(__dirname, "/client/admin.js")
   },
   resolve: {
     modules: [path.resolve(__dirname, "src"), "node_modules"]
