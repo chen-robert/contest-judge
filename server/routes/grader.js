@@ -27,8 +27,9 @@ const execLimits = {
 };
 
 const compare = (a, b) => {
-  return a.split("\r").join("") === b.split("\r").join("");
+  return clean(a) === clean(b);
 };
+const clean = a => a.trim().split("\r").join("").split("\n").map(a => a.trim()).join("");
 
 const status = (camisoleBody, expected) => {
   if (camisoleBody.compile) {
