@@ -1,11 +1,13 @@
 const router = require("express").Router();
 
-const { getUserData, addUser } = require(__rootdir + "/server/db");
+const { getUserData, addUser, removeUser } = require(__rootdir + "/server/db");
 
 
 router.get("/", (req, res) => res.sendFile(__rootdir + "/dist/admin.html"));
 
 router.get("/users", (req, res) => getUserData(data => res.send(data)));
+
+router.post("/remove", (req, res) => removeUser(req.body.username, data => res.send(data)));
 
 router.post("/addUser", (req, res) => {
   addUser(

@@ -34,6 +34,13 @@ module.exports = {
       .then(() => callback())
       .catch(err => handleError(err, callback));
   },
+  removeUser: (name, callback) => {
+    client.query(
+      "DELETE FROM users WHERE username = $1 RETURNING *",
+      [name]
+    ).then(callback)
+    .catch(err => handleError(err, callback));
+  },
   checkLogin: (name, password, callback) => {
     let data;
     client
