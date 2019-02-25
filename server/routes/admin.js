@@ -12,7 +12,7 @@ router.post("/remove", (req, res) => removeUser(req.body.username, data => res.s
 router.post("/addUser", (req, res) => {
   addUser(
     req.body.username,
-    "",
+    req.body.username + "none.com",
     req.body.password,
     req.body.division,
     err => {
