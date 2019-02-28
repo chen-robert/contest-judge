@@ -33,14 +33,14 @@ app.use("/login", require(__rootdir + "/server/routes/login.js"));
 // Private routes
 app.use(enforceLogin);
 app.get("/config", (req, res) => res.send(config));
-app.use("/problems", require(__rootdir + "/server/routes/problems.js"));
+app.use("/problems", require(__rootdir + "/server/routes/problems.js")(config));
 app.use(
   "/grader",
   require(__rootdir + "/server/routes/grader.js")(fullProblemData)
 );
 
 app.use(enforceAdmin);
-app.use("/admin", require(__rootdir + "/server/routes/admin.js"));
+app.use("/admin", require(__rootdir + "/server/routes/admin.js")(config));
 
 app.use(express.static(__dirname + "/dist", { extensions: ["html"] }));
 

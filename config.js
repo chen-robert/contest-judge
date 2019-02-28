@@ -1,4 +1,4 @@
 module.exports = {
-  startTime: new Date("2/5/19 22:25:01").getTime(),
-  endTime: new Date("2/5/19 22:45:01").getTime()
+  startTime: new Date("3/2/19 11:00:00").getTime(),
+  endTime: new Date("3/2/19 2:30:00").getTime()
 };
