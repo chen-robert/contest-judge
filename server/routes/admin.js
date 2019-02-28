@@ -10,7 +10,7 @@ module.exports = config => {
   router.post("/addUser", (req, res) => {
     addUser(
       req.body.username,
-      "",
+      req.body.username + "none.com",
       req.body.password,
       req.body.division,
       err => {

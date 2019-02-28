@@ -42,9 +42,9 @@ app.use(
   require(__rootdir + "/server/routes/grader.js")(fullProblemData)
 );
 
+app.use(express.static(__dirname + "/dist", { extensions: ["html"] }));
+
 app.use(enforceAdmin);
 app.use("/admin", require(__rootdir + "/server/routes/admin.js")(config));
-
-app.use(express.static(__dirname + "/dist", { extensions: ["html"] }));
 
 app.listen(PORT, () => console.log(`Started server at port ${PORT}`));
