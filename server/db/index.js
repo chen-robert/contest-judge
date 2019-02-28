@@ -66,7 +66,7 @@ module.exports = {
   },
   getUserData: callback => {
     client
-      .query("SELECT * FROM users")
+      .query("SELECT id, username, email, division FROM users")
       .then(res => callback(res.rows))
       .catch(err => handleError(err, callback));
   },

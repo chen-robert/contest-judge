@@ -8,12 +8,14 @@ const config = require(__dirname + "/config.js");
 const express = require("express");
 const session = require("express-session");
 
+
 // Server
 const { fullProblemData } = require("./server/problemData").loadProblems(
   __dirname + "/problems"
 );
 const enforceLogin = require(__rootdir + "/server/enforceLogin.js");
 const enforceAdmin = require(__rootdir + "/server/enforceAdmin.js");
+const {getUserData} = require(__rootdir + "/server/db");
 
 // Express app
 const app = express();
@@ -32,6 +34,7 @@ app.use("/login", require(__rootdir + "/server/routes/login.js"));
 
 // Private routes
 app.use(enforceLogin);
+app.get("/users", (req, res) => getUserData(data => res.json(data)));
 app.get("/config", (req, res) => res.send(config));
 app.use("/problems", require(__rootdir + "/server/routes/problems.js")(config));
 app.use(

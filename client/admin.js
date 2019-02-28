@@ -6,7 +6,7 @@ import "./forms.js";
 import $ from "jquery";
 
 const refresh = () => {
-  $.get("/admin/users").then(users => {
+  $.get("/users").then(users => {
     $("#users").html("");
     
     users.forEach(user => {

@@ -7,14 +7,19 @@ const submission = ({ problem, status }) => `
 </tr>
 `;
 
-const scoreboardItem = ({ username, score }) => `
+const scoreboardItem = ({ username, score, division }) => `
 <tr>
   <td>${username}</td>
   <td>${score}</td>
+  <td>${division}</td>
 </tr>
 `;
 
 const graderLoop = problemData => {
+  $.get("/users").then(users => {
+    const idToUser = {};
+    users.forEach(user => idToUser[user.id] = user);
+    
   $.get("/grader/user").then(user => {
     function reload() {
       $.get("/grader").then(subs => {
@@ -22,14 +27,12 @@ const graderLoop = problemData => {
           subs
             .filter(sub => sub.uid === user.uid)
             .sort((a, b) => b.time - a.time)
-            .slice(0, 5)
+            .slice(0, 15)
             .map(sub => submission(sub))
             .join("\n")
         );
 
         const isUnique = (val, index, self) => self.indexOf(val) === index;
-        const idToName = {};
-        subs.forEach(sub => (idToName[sub.uid] = sub.username));
 
         const users = subs.map(sub => sub.uid).filter(isUnique);
 
@@ -53,7 +56,6 @@ const graderLoop = problemData => {
                 score += problemToConfig[sub.problem].value;
               }
             });
-          const correct = Object.keys(correctTimes).length;
 
           const incorrect = subs
             .filter(sub => sub.uid === uid)
@@ -66,15 +68,20 @@ const graderLoop = problemData => {
             .forEach(sub => (score -= problemToConfig[sub.problem].penalty));
 
           return {
-            username: idToName[uid],
-            score
+            username: idToUser[uid].username,
+            score,
+            division: idToUser[uid].division, 
+            lastTime: Math.max.apply(Object.values(correctTimes))
           };
         };
 
         $("#scoreboard").html(
           users
             .map(calculateScore)
-            .sort((a, b) => b.score - a.score)
+            .sort((a, b) => {
+              if(b.score == a.score) return b.time - a.time;
+              return b.score - a.score;
+            })
             .map(sub => scoreboardItem(sub))
             .join("\n")
         );
@@ -82,6 +89,7 @@ const graderLoop = problemData => {
     }
     setInterval(reload, 1000);
     reload();
+  });
   });
 };
 
