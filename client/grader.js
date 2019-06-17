@@ -79,7 +79,7 @@ const graderLoop = problemData => {
           users
             .map(calculateScore)
             .sort((a, b) => {
-              if(b.score == a.score) return b.time - a.time;
+              if(b.score == a.score) return a.time - b.time;
               return b.score - a.score;
             })
             .map(sub => scoreboardItem(sub))

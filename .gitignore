@@ -1,6 +1,7 @@
 # Node.js
 node_modules/
 v8-compile-cache-0/
+npm-debug.log
 
 # Uploaded files
 uploads
