@@ -1,6 +1,7 @@
 import "./styles/main.less";
 import "./styles/admin.less";
 
+import escape from "./util";
 import "./forms.js";
 
 import $ from "jquery";
@@ -12,18 +13,27 @@ const refresh = () => {
     users.forEach(user => {
       const $row = $(`
       <tr class="submissions--row">
-        <td>${user.username}</td>
-        <td>${user.division}</td>
-      <5r>
+        <td><input class="submissions--input" value="${user.username}" /></td>
+        <td>
+          <select class="submissions--input" class="form--input" name="division">
+            <option ${user.division === "beginner"? "selected": ""} value="beginner">Beginner</option>
+            <option ${user.division === "advanced"? "selected": ""} value="advanced">Advanced</option>
+          </select>
+        </td>
+        <td class="submissions--delete">X</td>
+      </tr>
       `);
       
-      $row.data("username", user.username);
+      $row.find(".submissions--delete").data("username", user.username);
       
       $("#users").append($row);
     });
     
-    $(".submissions--row").click(function(){
-      $.post("/admin/remove/", {username: $(this).data("username")});
+    $(".submissions--delete").click(function(){
+      if(confirm(`Are you sure you want to delete ${$(this).data("username")}`)) {
+        $.post("/admin/user/remove/", {username: $(this).data("username")})
+          .then(() => refresh());
+      }
     });
   });
 }
@@ -31,4 +41,3 @@ const refresh = () => {
 
 
 refresh();
-setInterval(refresh, 2500);

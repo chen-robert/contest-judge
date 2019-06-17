@@ -15,6 +15,7 @@ const upload = require("multer")({
 });
 
 const api = process.env.CAMISOLE;
+console.log(`Using camsiole endpoint at ${api} (process.env.CAMISOLE)`);
 
 const compileLimits = {
   "wall-time": 10
@@ -32,6 +33,9 @@ const compare = (a, b) => {
 const clean = a => a.trim().split("\r").join("").split("\n").map(a => a.trim()).join("");
 
 const status = (camisoleBody, expected) => {
+  if (casmisoleBody) {
+    
+  }
   if (camisoleBody.compile) {
     if (camisoleBody.compile.exitcode !== 0) {
       return "COMPILE_ERROR";

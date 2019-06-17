@@ -23,7 +23,7 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(
   session({
-    secret: process.env.SECRET || "aria is nice :thinking:",
+    secret: process.env.SECRET || "aria is nice",
     resave: false,
     saveUninitialized: true
   })
@@ -33,7 +33,7 @@ app.use(
 app.use("/login", require(__rootdir + "/server/routes/login.js"));
 
 // Private routes
-app.use(enforceLogin);
+//app.use(enforceLogin);
 app.get("/users", (req, res) => getUserData(data => res.json(data)));
 app.get("/config", (req, res) => res.send(config));
 app.use("/problems", require(__rootdir + "/server/routes/problems.js")(config));
@@ -44,7 +44,7 @@ app.use(
 
 app.use(express.static(__dirname + "/dist", { extensions: ["html"] }));
 
-app.use(enforceAdmin);
+//app.use(enforceAdmin);
 app.use("/admin", require(__rootdir + "/server/routes/admin.js")(config));
 
 app.listen(PORT, () => console.log(`Started server at port ${PORT}`));

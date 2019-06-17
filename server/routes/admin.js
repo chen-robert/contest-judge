@@ -6,8 +6,8 @@ module.exports = config => {
 
   router.get("/", (req, res) => res.sendFile(__rootdir + "/dist/admin.html"));
 
-  router.post("/remove", (req, res) => removeUser(req.body.username, data => res.send(data)));
-  router.post("/addUser", (req, res) => {
+  router.post("/user/remove", (req, res) => removeUser(req.body.username, data => res.send(data)));
+  router.post("/user/add", (req, res) => {
     addUser(
       req.body.username,
       req.body.username + "none.com",
