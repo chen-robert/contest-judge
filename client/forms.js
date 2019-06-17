@@ -5,6 +5,7 @@ $(() => {
     e.preventDefault();
 
     const displayMessage = message => {
+      console.log(message);
       const popup = `
       <div class="error">${message}</div>
       `;
