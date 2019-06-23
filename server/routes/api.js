@@ -20,8 +20,6 @@ module.exports = config => {
         return data;
       });
 
-      console.log("HI");
-
       const isUnique = (val, index, self) => self.indexOf(val) === index;
       const users = subs.map(sub => sub.uid).filter(isUnique);
 

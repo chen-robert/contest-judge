@@ -1,5 +1,3 @@
-import $ from "jquery";
-
 const formatMilliseconds = ms => {
   const secs = Math.floor(ms / 1000);
   const minutes = Math.floor(secs / 60);

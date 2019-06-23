@@ -43,11 +43,11 @@ module.exports = {
 
       const tests = [];
       let i = 0;
-      while (fs.existsSync(`${problemDir}/${i}.in`)) {
+      while (fs.existsSync(`${problemDir}/data/${i}.in`)) {
         tests.push({
           name: `test_${i}`,
-          stdin: fs.readFileSync(`${problemDir}/${i}.in`).toString(),
-          stdout: fs.readFileSync(`${problemDir}/${i}.out`).toString()
+          stdin: fs.readFileSync(`${problemDir}/data/${i}.in`).toString(),
+          stdout: fs.readFileSync(`${problemDir}/data/${i}.out`).toString()
         });
 
         i++;
