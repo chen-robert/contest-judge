@@ -1,10 +1,3 @@
-window.MathJax = {
-  tex2jax: {
-    inlineMath: [["$", "$"], ["\\(", "\\)"]],
-    processEscapes: true
-  }
-};
-
 $(() => {
   $(".problem-list--item").click(function(e) {
     e.preventDefault();
@@ -34,5 +27,3 @@ const updateSubmissions = () => {
     );
   });
 };
-
-setInterval(updateSubmissions, 1000);

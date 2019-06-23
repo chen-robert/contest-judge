@@ -1,7 +1,6 @@
 module.exports = config => {
-  const { problemData } = require(__rootdir + "/server/problemData").loadProblems(
-    __rootdir + "/problems"
-  );
+  const { problemData } = require(__rootdir +
+    "/server/problemData").loadProblems(__rootdir + "/problems");
 
   const loadProblems = () => {
     if (Date.now() < config.startTime) {
@@ -12,4 +11,4 @@ module.exports = config => {
   };
 
   return loadProblems;
-}
+};

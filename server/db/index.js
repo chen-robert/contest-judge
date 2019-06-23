@@ -35,11 +35,10 @@ module.exports = {
       .catch(err => handleError(err, callback));
   },
   removeUser: (name, callback) => {
-    client.query(
-      "DELETE FROM users WHERE username = $1 RETURNING *",
-      [name]
-    ).then(callback)
-    .catch(err => handleError(err, callback));
+    client
+      .query("DELETE FROM users WHERE username = $1 RETURNING *", [name])
+      .then(callback)
+      .catch(err => handleError(err, callback));
   },
   checkLogin: (name, password, callback) => {
     let data;
@@ -92,9 +91,20 @@ module.exports = {
       [status, uid, problem, time]
     );
   },
-  getSolves: callback => {
+  getAllSolves: callback => {
     client
-      .query("SELECT * FROM solves")
+      .query(
+        `
+        SELECT solves.user_id, solves.problem, solves.status, solves.time, users.username, users.division FROM solves 
+        INNER JOIN users ON solves.user_id = users.id
+      `
+      )
+      .then(res => callback(res.rows))
+      .catch(err => handleError(err, callback));
+  },
+  getSolves: (uid, callback) => {
+    client
+      .query("SELECT * FROM solves WHERE user_id = $1", [uid])
       .then(res => callback(res.rows))
       .catch(err => handleError(err, callback));
   }

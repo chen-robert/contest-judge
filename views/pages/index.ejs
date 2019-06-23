@@ -7,11 +7,8 @@
   </head>
   <body>
     <% include ../partials/popup %>
-    <nav class="navbar">
-      <a href="/" id="navbar-problems" class="navbar--link"> Problems </a>
-      <a href="/scoreboard" id="navbar-scoreboard" class="navbar--link"> Scoreboard </a>
-      <p id="timer" class="navbar--timer"></p>
-    </nav>
+    <% include ../partials/navbar %>
+    
     <section class="problem-section">
       <div id="problem-list" class="problem-list">
         <% problems.forEach((problem, i) => { %>
@@ -58,18 +55,6 @@
           <tbody id="submissions"></tbody>
         </table>
       </div>
-    </section>
-    <section class="scoreboard-section">
-      <table class="scoreboard">
-        <thead>
-          <tr>
-            <th>User</th>
-            <th>Score</th>
-            <th>Division</th>
-          </tr>
-        </thead>
-        <tbody class="scoreboard--data" id="scoreboard"></tbody>
-      </table>
     </section>
   </body>
 </html>

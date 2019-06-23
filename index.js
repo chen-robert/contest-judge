@@ -13,18 +13,16 @@ const { fullProblemData } = require("./server/problemData").loadProblems(
   __dirname + "/problems"
 );
 const loadProblems = require(__rootdir + "/server/routes/problems.js")(config);
-const {getUserData} = require(__rootdir + "/server/db");
 const { getPopups } = require(__rootdir + "/server/util");
 
 const enforceLogin = require(__rootdir + "/server/enforceLogin.js");
 const enforceAdmin = require(__rootdir + "/server/enforceAdmin.js");
 
-
 // Express app
 const app = express();
 
-const lessMiddleware = require('less-middleware');
-app.use(lessMiddleware(__dirname + '/public'));
+const lessMiddleware = require("less-middleware");
+app.use(lessMiddleware(__dirname + "/public"));
 app.use(express.static(__dirname + "/public"));
 
 app.set("view engine", "ejs");
@@ -34,7 +32,7 @@ app.use(
   cookieSession({
     name: "session",
     keys: [process.env.SECRET || "aria is nice"],
-    maxAge: 24 * 60 * 60 * 1000 
+    maxAge: 24 * 60 * 60 * 1000
   })
 );
 
@@ -44,15 +42,24 @@ app.use("/login", require(__rootdir + "/server/routes/login.js"));
 // Private routes
 app.use(enforceLogin);
 app.get("/", (req, res) => {
-  const {error, message} = getPopups(req.session);
-  
+  const { error, message } = getPopups(req.session);
+
   res.render("pages/index", {
     problems: loadProblems(),
-    error, 
+    error,
     message
   });
 });
-app.get("/users", (req, res) => getUserData(data => res.json(data)));
+app.get("/scoreboard", (req, res) => {
+  const { error, message } = getPopups(req.session);
+
+  res.render("pages/scoreboard", {
+    error,
+    message
+  });
+});
+
+app.use("/api", require(__rootdir + "/server/routes/api.js"));
 app.get("/config", (req, res) => res.send(config));
 
 app.use(

@@ -1,12 +1,14 @@
 module.exports = config => {
   const router = require("express").Router();
 
-  const { getUserData, addUser, removeUser } = require(__rootdir + "/server/db");
-
+  const { getUserData, addUser, removeUser } = require(__rootdir +
+    "/server/db");
 
   router.get("/", (req, res) => res.sendFile(__rootdir + "/dist/admin.html"));
 
-  router.post("/user/remove", (req, res) => removeUser(req.body.username, data => res.send(data)));
+  router.post("/user/remove", (req, res) =>
+    removeUser(req.body.username, data => res.send(data))
+  );
   router.post("/user/add", (req, res) => {
     addUser(
       req.body.username,
@@ -21,4 +23,4 @@ module.exports = config => {
   });
 
   return router;
-}
+};

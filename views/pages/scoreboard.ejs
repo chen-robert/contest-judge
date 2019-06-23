@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <% include ../partials/header %>
+    <script src="/scripts/scoreboard.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  </head>
+  <body>
+    <% include ../partials/popup %>
+    <% include ../partials/navbar %>
+    
+    <section class="scoreboard-section">
+      <table class="scoreboard">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Score</th>
+            <th>Division</th>
+          </tr>
+        </thead>
+        <tbody class="scoreboard--data" id="scoreboard"></tbody>
+      </table>
+    </section>
+  </body>
+</html>

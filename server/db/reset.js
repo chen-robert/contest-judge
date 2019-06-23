@@ -7,9 +7,7 @@ console.log(connectionString);
 const client = new Client({ connectionString });
 client.connect();
 
-const queries = [
-  "DELETE FROM solves",
-];
+const queries = ["DELETE FROM solves"];
 
 async.eachSeries(
   queries,

@@ -3,10 +3,12 @@ const {
   startGrading,
   finishGrading,
   getSolves,
-  getUserData
+  getUserData,
+  getAllSolves
 } = require(__rootdir + "/server/db");
 const request = require("request");
 const router = require("express").Router();
+
 const upload = require("multer")({
   dest: "uploads/",
   limits: {
@@ -30,7 +32,14 @@ const execLimits = {
 const compare = (a, b) => {
   return clean(a) === clean(b);
 };
-const clean = a => a.trim().split("\r").join("").split("\n").map(a => a.trim()).join("");
+const clean = a =>
+  a
+    .trim()
+    .split("\r")
+    .join("")
+    .split("\n")
+    .map(a => a.trim())
+    .join("");
 
 const status = (camisoleBody, expected) => {
   if (camisoleBody.compile) {
@@ -56,30 +65,24 @@ const status = (camisoleBody, expected) => {
 };
 
 module.exports = problems => {
-  router.get("/", (req, res) => {
-    getUserData(data => {
-      const idToName = {};
-      data.forEach(user => (idToName[user.id] = user.username));
+  router.get("/submissions", (req, res) => {
+    getSolves(req.session.uid, rows => {
+      rows = rows.map(row => {
+        const data = {
+          uid: row.user_id,
+          problem: row.problem,
+          status: row.status,
+          time: row.time
+        };
 
-      getSolves(rows => {
-        rows = rows.map(row => {
-          const data = {
-            uid: row.user_id,
-            username: idToName[row.user_id],
-            problem: row.problem,
-            status: row.status,
-            time: row.time
-          };
-
-          return data;
-        });
-
-        res.send(rows);
+        return data;
       });
+
+      return res.send(rows);
     });
   });
   router.get("/user", (req, res) => res.send({ uid: req.session.uid }));
-  
+
   router.post(
     "/submit",
     (req, res, next) => {
@@ -125,7 +128,7 @@ module.exports = problems => {
           url: `http://${api}/run`
         },
         (err, response, body) => {
-          if(err) {
+          if (err) {
             console.log(err);
             req.session.error = "Grading error. Please contact an admin.";
             return res.redirect("/");
@@ -138,7 +141,7 @@ module.exports = problems => {
           );
         }
       );
-      
+
       req.session.message = "Successfully submitted";
       return res.redirect("/");
     }

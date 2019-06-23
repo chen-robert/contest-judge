@@ -3,7 +3,7 @@
 .popup {
   position: absolute;
   top: 25px;
-  
+
   left: 0;
   right: 0;
   width: 25%;
@@ -16,9 +16,9 @@
   background-color: #eee;
   color: black;
   padding: 10px 0;
-  
+
   animation: fadeout 1s 2s forwards;
-  
+
   &:hover {
     cursor: pointer;
     background-color: darken(#eee, 5%);
@@ -28,14 +28,17 @@
 .popup__error {
   background-color: @error-color;
   color: white;
-  
+
   &:hover {
     background-color: darken(@error-color, 5%);
   }
-
 }
 
 @keyframes fadeout {
-    from { opacity: 1; }
-    to   { opacity: 0; }
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
