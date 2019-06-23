@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Programming Judge | Admin</title>
+    <script src="/admin.js"></script>
+    <meta
+      name="viewport"
+      content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0"
+    />
+    <meta name="og:type" content="website" />
+    <meta name="og:site_name" content="Programming Judge" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self' localhost:* ws://localhost:*; font-src 'self' data:; script-src 'self'; object-src 'none';"
+    />
+  </head>
+  <body>
+    <div class="form">
+      <form action="/admin/user/add" method="POST">
+        <h1>Add User</h1>
+        <input class="form--input" placeholder="Username" name="username" />
+        <input class="form--input" placeholder="Password" name="password" />
+        <select class="form--input" name="division">
+          <option value="beginner">Beginner</option>
+          <option value="advanced">Advanced</option>
+        </select>
+        <button class="form--button" type="submit">Submit</button>
+      </form>
+    </div>
+    <table class="submissions">
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Division</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="users"></tbody>
+    </table>
+  </body>
+</html>

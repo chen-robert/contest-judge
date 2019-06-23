@@ -1,19 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Programming Judge</title>
-    <script src="app.js"></script>
-    <meta
-      name="viewport"
-      content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0"
-    />
-    <meta name="og:type" content="website" />
-    <meta name="og:site_name" content="Programming Judge" />
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'self' localhost:* ws://localhost:*; font-src 'self' data: cdnjs.cloudflare.com; script-src 'self' cdnjs.cloudflare.com; object-src 'none'; style-src 'self' 'unsafe-inline'"
-    />
+    <% include ../partials/header %>
   </head>
   <body>
     <nav class="navbar">
@@ -22,8 +10,25 @@
       <p id="timer" class="navbar--timer"></p>
     </nav>
     <section class="problem-section">
-      <div id="problem-list" class="problem-list"></div>
-      <div id="problems"></div>
+      <div id="problem-list" class="problem-list">
+        <% problems.forEach((problem, i) => { %>
+          <div class="problem-list--item" data-id="<%= i %>" data-name="<%= problem.name %>">
+            <a class="navbar--link" href="#problem-<%= problem.name %>"><%= problem.name %></a>
+          </div>
+        <% }) %>
+      </div>
+      <div id="problems">
+        <% problems.forEach((problem, i) => { %>
+        <div data-id="<%= i %>" class="problem-statement" <%- i === 0? "": `style="display: none";` %>>
+          <div class="problem--title"><%= problem.name %></div>
+          <div class="problem--text"><%= problem.statement %></div>
+          <div class="problem--title problem--title__secondary">Sample Input</div>
+          <div class="problem--text"><%= problem.sampleIn %></div>
+          <div class="problem--title problem--title__secondary">Sample Output</div>
+          <div class="problem--text"><%= problem.sampleOut %></div>
+        </div>
+        <% }) %>
+      </div>
       <div class="problem-submit form">
         <form
           action="/grader/submit"
@@ -67,5 +72,6 @@
         <tbody class="scoreboard--data" id="scoreboard"></tbody>
       </table>
     </section>
+    <script src="/scripts/problems.js"></script>
   </body>
 </html>
