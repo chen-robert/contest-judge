@@ -35,4 +35,5 @@ const updateSubmissions = () => {
   });
 };
 
+$(updateSubmissions);
 setInterval(updateSubmissions, 1000);

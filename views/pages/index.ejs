@@ -25,8 +25,9 @@
         </div>
         <% }) %>
       </div>
-      <div class="problem-submit form">
+      <div class="problem-submit">
         <form
+          class="form"
           action="/grader/submit"
           method="POST"
           enctype="multipart/form-data"
@@ -45,6 +46,7 @@
             Submit
           </button>
         </form>
+        <br>
         <table class="submissions">
           <thead>
             <tr>
