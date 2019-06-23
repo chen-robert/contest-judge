@@ -44,7 +44,9 @@ app.use("/login", require(__rootdir + "/server/routes/login.js"));
 //app.use(enforceLogin);
 app.get("/", (req, res) => {
   res.render("pages/index", {
-    problems: loadProblems()
+    problems: loadProblems(),
+    message: req.message,
+    error: req.error
   });
 });
 app.get("/users", (req, res) => getUserData(data => res.json(data)));

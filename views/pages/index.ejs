@@ -2,11 +2,14 @@
 <html lang="en">
   <head>
     <% include ../partials/header %>
+    <script src="/scripts/problems.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
   </head>
   <body>
+    <% include ../partials/popup %>
     <nav class="navbar">
-      <a href="#" id="navbar-problems" class="navbar--link"> Problems </a>
-      <a href="#" id="navbar-scoreboard" class="navbar--link"> Scoreboard </a>
+      <a href="/" id="navbar-problems" class="navbar--link"> Problems </a>
+      <a href="/scoreboard" id="navbar-scoreboard" class="navbar--link"> Scoreboard </a>
       <p id="timer" class="navbar--timer"></p>
     </nav>
     <section class="problem-section">
@@ -22,10 +25,6 @@
         <div data-id="<%= i %>" class="problem-statement" <%- i === 0? "": `style="display: none";` %>>
           <div class="problem--title"><%= problem.name %></div>
           <div class="problem--text"><%= problem.statement %></div>
-          <div class="problem--title problem--title__secondary">Sample Input</div>
-          <div class="problem--text"><%= problem.sampleIn %></div>
-          <div class="problem--title problem--title__secondary">Sample Output</div>
-          <div class="problem--text"><%= problem.sampleOut %></div>
         </div>
         <% }) %>
       </div>
@@ -72,6 +71,5 @@
         <tbody class="scoreboard--data" id="scoreboard"></tbody>
       </table>
     </section>
-    <script src="/scripts/problems.js"></script>
   </body>
 </html>

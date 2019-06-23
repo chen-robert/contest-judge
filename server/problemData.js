@@ -23,13 +23,9 @@ module.exports = {
           ? require(problemDir + "/config.json")
           : {}
       );
-      const sampleIn = fs.readFileSync(problemDir + "/0.in", "utf8");
-      const sampleOut = fs.readFileSync(problemDir + "/0.out", "utf8");
       const problemData = {
         name: file,
         statement,
-        sampleIn,
-        sampleOut,
         config
       };
       ret.push(problemData);

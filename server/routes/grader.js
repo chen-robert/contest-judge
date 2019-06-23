@@ -82,20 +82,29 @@ module.exports = problems => {
     });
   });
   router.get("/user", (req, res) => res.send({ uid: req.session.uid }));
+  
   router.post(
     "/submit",
     (req, res, next) => {
       upload.single("file")(req, res, err => {
-        if (err) return res.send({ error: "Invalid file" });
+        if (err) {
+          req.error = "Invalid file";
+          return res.redirect("/");
+        }
         next();
       });
     },
     (req, res) => {
       const tests = problems[req.body.pid];
 
-      if (req.file === undefined)
-        return res.send({ error: "Please upload a file" });
-      if (tests === undefined) return res.send({ error: "Unknown error" });
+      if (req.file === undefined) {
+        req.error = "Please upload a file";
+        return res.redirect("/");
+      }
+      if (tests === undefined) {
+        req.error = "Unknown error. Please contact an admin.";
+        return res.redirect("/");
+      }
 
       const data = fs.readFileSync(req.file.path, "utf8");
       const expected = {};
@@ -127,8 +136,9 @@ module.exports = problems => {
           );
         }
       );
-
-      res.send({ message: "Successfully submitted" });
+      
+      req.message = "Successfully submitted";
+      res.redirect("/");
     }
   );
   return router;

@@ -4,7 +4,6 @@ module.exports = config => {
   );
 
   const loadProblems = () => {
-    console.log(problemData);
     if (Date.now() < config.startTime) {
       return problemData.filter(problem => problem.config.sample);
     } else {

@@ -1,0 +1,11 @@
+<link rel="stylesheet" type="text/css" href="/styles/popup.css">
+<% if(typeof error !== "undefined") { %> 
+  <div class="popup popup__error">
+    <%= error %>
+  </div>
+<% } %>
+<% if(typeof message !== "undefined") { %> 
+  <div class="popup">
+    <%= message %>
+  </div>
+<% } %>
