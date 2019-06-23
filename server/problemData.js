@@ -10,8 +10,9 @@ module.exports = {
   loadClientProblemData: dir => {
     const ret = [];
     const defaultConf = require(dir + "/default.json");
-    fs.readdirSync(dir).forEach(file => {
-      const problemDir = dir + "/" + file;
+    const config = require(dir + "/config.json");
+    config.problems.forEach(problem => {
+      const problemDir = dir + "/" + problem;
 
       if (!fs.lstatSync(problemDir).isDirectory()) return;
 
@@ -24,7 +25,7 @@ module.exports = {
           : {}
       );
       const problemData = {
-        name: file,
+        name: problem,
         statement,
         config
       };
@@ -34,8 +35,9 @@ module.exports = {
   },
   loadFullProblemData: dir => {
     const ret = {};
-    fs.readdirSync(dir).forEach(file => {
-      const problemDir = dir + "/" + file;
+    const config = require(dir + "/config.json");
+    config.problems.forEach(problem => {
+      const problemDir = dir + "/" + problem;
 
       if (!fs.lstatSync(problemDir).isDirectory()) return;
 
@@ -51,7 +53,7 @@ module.exports = {
         i++;
       }
 
-      ret[file] = tests;
+      ret[problem] = tests;
     });
     return ret;
   }

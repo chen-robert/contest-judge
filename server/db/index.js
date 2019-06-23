@@ -78,7 +78,8 @@ module.exports = {
       VALUES($1, $2, $3, $4)
       `,
       [uid, problem, "GRADING", time]
-    );
+    )
+      .catch(err => console.log("Grading broken"));
     return time;
   },
   finishGrading: (uid, time, problem, status) => {

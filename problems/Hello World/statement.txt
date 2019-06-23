@@ -1,7 +1,7 @@
-Justin the Jaguar is learning programming. Help him with a very simple task!
+Samuel is learning programming. Help him with a very simple task!
 
-${\bf Input Format}$
-There are $N$ lines $$(0 <= N <= 0)$$ of input
+<h2>Input Format</h2>
+There is no input.
 
-${\bf Output Format}$
-1 line of output.
+<h2>Output Format</h2>
+Print "Hello W0rld!". 
