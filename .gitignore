@@ -14,3 +14,4 @@ dist/*
 problems/*
 !problems/Hello\ World
 !problems/default.json
+!problems/config.json
