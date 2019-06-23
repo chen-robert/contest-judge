@@ -6,7 +6,7 @@ const config = require(__dirname + "/config.js");
 
 // Express
 const express = require("express");
-const session = require("express-session");
+const cookieSession = require("cookie-session");
 
 // Server
 const { fullProblemData } = require("./server/problemData").loadProblems(
@@ -14,6 +14,7 @@ const { fullProblemData } = require("./server/problemData").loadProblems(
 );
 const loadProblems = require(__rootdir + "/server/routes/problems.js")(config);
 const {getUserData} = require(__rootdir + "/server/db");
+const { getPopups } = require(__rootdir + "/server/util");
 
 const enforceLogin = require(__rootdir + "/server/enforceLogin.js");
 const enforceAdmin = require(__rootdir + "/server/enforceAdmin.js");
@@ -30,10 +31,10 @@ app.set("view engine", "ejs");
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(
-  session({
-    secret: process.env.SECRET || "aria is nice",
-    resave: false,
-    saveUninitialized: true
+  cookieSession({
+    name: "session",
+    keys: [process.env.SECRET || "aria is nice"],
+    maxAge: 24 * 60 * 60 * 1000 
   })
 );
 
@@ -41,12 +42,14 @@ app.use(
 app.use("/login", require(__rootdir + "/server/routes/login.js"));
 
 // Private routes
-//app.use(enforceLogin);
+app.use(enforceLogin);
 app.get("/", (req, res) => {
+  const {error, message} = getPopups(req.session);
+  
   res.render("pages/index", {
     problems: loadProblems(),
-    message: req.message,
-    error: req.error
+    error, 
+    message
   });
 });
 app.get("/users", (req, res) => getUserData(data => res.json(data)));

@@ -1,21 +1,26 @@
 const router = require("express").Router();
 
+const { getPopups } = require(__rootdir + "/server/util");
 const { checkLogin } = require(__rootdir + "/server/db");
 
 router.get("/", (req, res) => {
+  const {error, message} = getPopups(req.session);
+  
   res.render("pages/login", {
-    message: req.message,
-    error: res.locals.error
+    message: message,
+    error: error
   });
 });
 
 router.post("/", (req, res) => {
   checkLogin(req.body.username, req.body.password, (err, data) => {
     if (err) {
-      res.locals.error = err;
+      req.session.error = err;
       return res.redirect("/login");
     }
     
+    req.session.uid = data.id;
+    req.session.username = req.body.username;
     return res.redirect("/");
   });
 });

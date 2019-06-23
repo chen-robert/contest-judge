@@ -33,9 +33,6 @@ const compare = (a, b) => {
 const clean = a => a.trim().split("\r").join("").split("\n").map(a => a.trim()).join("");
 
 const status = (camisoleBody, expected) => {
-  if (casmisoleBody) {
-    
-  }
   if (camisoleBody.compile) {
     if (camisoleBody.compile.exitcode !== 0) {
       return "COMPILE_ERROR";
@@ -88,7 +85,7 @@ module.exports = problems => {
     (req, res, next) => {
       upload.single("file")(req, res, err => {
         if (err) {
-          req.error = "Invalid file";
+          req.session.error = "Invalid file";
           return res.redirect("/");
         }
         next();
@@ -98,11 +95,11 @@ module.exports = problems => {
       const tests = problems[req.body.pid];
 
       if (req.file === undefined) {
-        req.error = "Please upload a file";
+        req.session.error = "Please upload a file";
         return res.redirect("/");
       }
       if (tests === undefined) {
-        req.error = "Unknown error. Please contact an admin.";
+        req.session.error = "Unknown error. Please contact an admin.";
         return res.redirect("/");
       }
 
@@ -128,6 +125,11 @@ module.exports = problems => {
           url: `http://${api}/run`
         },
         (err, response, body) => {
+          if(err) {
+            console.log(err);
+            req.session.error = "Grading error. Please contact an admin.";
+            return res.redirect("/");
+          }
           finishGrading(
             req.session.uid,
             time,
@@ -137,8 +139,8 @@ module.exports = problems => {
         }
       );
       
-      req.message = "Successfully submitted";
-      res.redirect("/");
+      req.session.message = "Successfully submitted";
+      return res.redirect("/");
     }
   );
   return router;
