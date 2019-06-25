@@ -4,7 +4,8 @@ module.exports = config => {
   const { getUserData, addUser, removeUser } = require(__rootdir +
     "/server/db");
 
-  router.get("/", (req, res) => res.sendFile(__rootdir + "/dist/admin.html"));
+  router.get("/", (req, res) => res.render("pages/admin/index"));
+  router.get("/users", (req, res) => res.render("pages/admin/users"));
 
   router.post("/user/remove", (req, res) =>
     removeUser(req.body.username, data => res.send(data))
