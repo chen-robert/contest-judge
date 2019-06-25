@@ -1,7 +1,0 @@
-Samuel is learning programming. Help him with a very simple task!
-
-<h2>Input Format</h2>
-There is no input.
-
-<h2>Output Format</h2>
-Print "Hello W0rld!". 

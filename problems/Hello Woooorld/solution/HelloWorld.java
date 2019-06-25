@@ -6,7 +6,9 @@ public class HelloWorld {
     Scanner in = new Scanner(System.in);
     PrintStream out = System.out;
     
-    out.println("Hello W0rld!");
+    int N = in.nextInt();
+    
+    for(int i = 0; i < N; i++) out.println("Hello W0rld!");
     
     out.close();
     in.close();
