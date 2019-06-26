@@ -8,11 +8,7 @@ const scoreboardItem = ({ username, score, division }) => `
 
 const updateScoreboard = () => {
   $.get("/api/scoreboard").then(entries => {
-    $("#scoreboard").html(
-      entries
-        .map(sub => scoreboardItem(sub))
-        .join("\n")
-    );
+    $("#scoreboard").html(entries.map(sub => scoreboardItem(sub)).join("\n"));
   });
 };
 

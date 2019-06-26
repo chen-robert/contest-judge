@@ -7,7 +7,7 @@ const config = require(__dirname + "/config.js");
 // Express
 const express = require("express");
 const cookieSession = require("cookie-session");
-const lessMiddleware = require('less-middleware');
+const lessMiddleware = require("less-middleware");
 const bodyParser = require("body-parser");
 
 // Server
@@ -21,13 +21,11 @@ const { getPopups } = require(__rootdir + "/server/util");
 const enforceLogin = require(__rootdir + "/server/enforceLogin.js");
 const enforceAdmin = require(__rootdir + "/server/enforceAdmin.js");
 
-
 // Express app
 const app = express();
 
-
 app.set("view engine", "ejs");
-app.use(lessMiddleware(__dirname + '/public'));
+app.use(lessMiddleware(__dirname + "/public"));
 app.use(express.static(__dirname + "/public"));
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -35,7 +33,7 @@ app.use(
   cookieSession({
     name: "session",
     keys: [process.env.SECRET || "aria is nice"],
-    maxAge: 24 * 60 * 60 * 1000 
+    maxAge: 24 * 60 * 60 * 1000
   })
 );
 
@@ -45,19 +43,19 @@ app.use("/login", require(__rootdir + "/server/routes/login.js"));
 // Require login
 app.use(enforceLogin);
 app.get("/", (req, res) => {
-  const {error, message} = getPopups(req.session);
-  
+  const { error, message } = getPopups(req.session);
+
   res.render("pages/index", {
     problems: loadProblems(),
-    error, 
+    error,
     message
   });
 });
 app.get("/scoreboard", (req, res) => {
-  const {error, message} = getPopups(req.session);
-  
+  const { error, message } = getPopups(req.session);
+
   res.render("pages/scoreboard", {
-    error, 
+    error,
     message
   });
 });

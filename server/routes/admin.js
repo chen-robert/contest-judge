@@ -1,4 +1,4 @@
-const {getUserData} = require(__rootdir + "/server/db");
+const { getUserData } = require(__rootdir + "/server/db");
 const { getPopups } = require(__rootdir + "/server/util");
 
 module.exports = config => {
@@ -9,19 +9,24 @@ module.exports = config => {
 
   router.get("/", (req, res) => res.render("pages/admin/index"));
   router.get("/users", (req, res) => {
-    const {error, message} = getPopups(req.session);
-  
-    res.render("pages/admin/users", {
-      error, 
-      message
+    const { error, message } = getPopups(req.session);
+
+    getUserData(users => {
+      res.render("pages/admin/users", {
+        users,
+        error,
+        message
+      });
     });
   });
   router.get("/users/list", (req, res) => getUserData(data => res.json(data)));
 
-
-  router.post("/users/remove", (req, res) =>
-    removeUser(req.body.username, data => res.send(data))
-  );
+  router.post("/users/remove", (req, res) => {
+    removeUser(req.body.username, () => {
+      req.session.message = `User ${req.body.username} removed`
+      res.redirect("/admin/users");
+    });
+  });
   router.post("/users/add", (req, res) => {
     addUser(
       req.body.username,

@@ -1,7 +1,9 @@
 const router = require("express").Router();
 
 module.exports = config => {
-  const loadProblems = require(__rootdir + "/server/routes/problems.js")(config);
+  const loadProblems = require(__rootdir + "/server/routes/problems.js")(
+    config
+  );
   const { getAllSolves } = require(__rootdir + "/server/db");
 
   const problemData = loadProblems();
@@ -26,7 +28,10 @@ module.exports = config => {
       const idToUser = {};
       subs.forEach(
         sub =>
-          (idToUser[sub.uid] = { username: sub.username, division: sub.division })
+          (idToUser[sub.uid] = {
+            username: sub.username,
+            division: sub.division
+          })
       );
       const calculateScore = uid => {
         let score = 0;
@@ -76,4 +81,4 @@ module.exports = config => {
     });
   });
   return router;
-}
+};

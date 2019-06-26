@@ -71,14 +71,15 @@ module.exports = {
   },
   startGrading: (uid, problem) => {
     const time = new Date().getTime();
-    client.query(
-      `
+    client
+      .query(
+        `
       INSERT INTO solves
       (user_id, problem, status, time) 
       VALUES($1, $2, $3, $4)
       `,
-      [uid, problem, "GRADING", time]
-    )
+        [uid, problem, "GRADING", time]
+      )
       .catch(err => console.log("Grading broken"));
     return time;
   },

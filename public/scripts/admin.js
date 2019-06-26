@@ -31,7 +31,7 @@ const refresh = () => {
       ) {
         $.post("/admin/users/remove/", {
           username: $(this).data("username")
-        }).then(() => refresh());
+        }).then(data => (window.location.href = "/admin/users"));
       }
     });
   });
