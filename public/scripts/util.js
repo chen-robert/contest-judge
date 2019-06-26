@@ -8,6 +8,6 @@ function replaceTag(tag) {
   return tagsToReplace[tag] || tag;
 }
 
-export function escape(html) {
+function escape(html) {
   return html.replace(/[&<>]/g, replaceTag);
 }

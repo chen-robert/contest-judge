@@ -2,10 +2,13 @@
 <html lang="en">
   <head>
     <% include ../../partials/header %>
+    <link rel="stylesheet" type="text/css" href="/styles/admin.css">
+    <script src="/scripts/admin.js"></script>
   </head>
   <body>
+    <% include ../../partials/popup %>
     <div class="form">
-      <form action="/admin/user/add" method="POST">
+      <form action="/admin/users/add" method="POST">
         <h1>Add User</h1>
         <input class="form--input" placeholder="Username" name="username" />
         <input class="form--input" placeholder="Password" name="password" />
