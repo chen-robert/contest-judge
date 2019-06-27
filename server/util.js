@@ -11,8 +11,6 @@ const getPopups = session => {
 const renderWithPopups = (req, res, view, data = {}) => {
   const { error, message } = getPopups(req.session);
 
-  console.log(view, data);
-  console.log({ ...data, error, message });
   res.render(view, { ...data, error, message });
 };
 

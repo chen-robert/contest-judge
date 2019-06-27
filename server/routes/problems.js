@@ -3,7 +3,7 @@ module.exports = config => {
     "/server/problemData").loadProblems(__rootdir + "/problems");
 
   const loadProblems = () => {
-    if (Date.now() < config.startTime) {
+    if (Date.now() < new Date(config.startTime).getTime()) {
       return problemData.filter(problem => problem.config.sample);
     } else {
       return problemData;

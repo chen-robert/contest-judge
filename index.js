@@ -2,7 +2,7 @@ global.__rootdir = __dirname;
 
 // Config
 const PORT = process.env.PORT || 3000;
-const config = require(__dirname + "/config.js");
+const config = require(__dirname + "/config.json");
 
 // Express
 const express = require("express");

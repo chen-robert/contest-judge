@@ -7,8 +7,7 @@
     <% include ../../partials/popup %>
     <% 
     function prettyPrint(time){
-      const date = new Date();
-      date.setTime(time);
+      const date = new Date(time);
 
       return date.toString();
     }

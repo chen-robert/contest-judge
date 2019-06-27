@@ -1,6 +1,11 @@
 const router = require("express").Router();
-const config = require(__rootdir + "/config");
+const config = require(__rootdir + "/config.json");
 const { renderWithPopups } = require(__rootdir + "/server/util");
+
+const fs = require("fs");
+const updateConfigFile = () => {
+  fs.writeFileSync(__rootdir + "/config.json", JSON.stringify(config));
+}
 
 router.get("/", (req, res) =>
   renderWithPopups(req, res, "pages/admin/config", { config })
@@ -14,6 +19,8 @@ router.post("/update", (req, res) => {
         config[key] = newData[key];
       }
     });
+    updateConfigFile();
+
     req.session.message = "Sucessfully updated config";
   } catch (e) {
     req.session.error = e.message;
@@ -30,8 +37,10 @@ router.post("/time", (req, res) => {
   }else if(endTime == NaN){
     req.session.error = `${req.body.endTime} invalid Date string`;
   }else{
-    config.startTime = startTime;
-    config.endTime = endTime;
+    config.startTime = req.body.startTime;
+    config.endTime = req.body.endTime;
+
+    updateConfigFile();
 
     req.session.message = "Successfully updated times";
   }
