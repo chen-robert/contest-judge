@@ -5,7 +5,7 @@ const { renderWithPopups } = require(__rootdir + "/server/util");
 const fs = require("fs");
 const updateConfigFile = () => {
   fs.writeFileSync(__rootdir + "/config.json", JSON.stringify(config));
-}
+};
 
 router.get("/", (req, res) =>
   renderWithPopups(req, res, "pages/admin/config", { config })
@@ -32,11 +32,11 @@ router.post("/time", (req, res) => {
   const startTime = new Date(req.body.startTime).getTime();
   const endTime = new Date(req.body.startTime).getTime();
 
-  if(startTime == NaN){
+  if (startTime == NaN) {
     req.session.error = `${req.body.startTime} invalid Date string`;
-  }else if(endTime == NaN){
+  } else if (endTime == NaN) {
     req.session.error = `${req.body.endTime} invalid Date string`;
-  }else{
+  } else {
     config.startTime = req.body.startTime;
     config.endTime = req.body.endTime;
 

@@ -25,11 +25,11 @@ module.exports = config => {
     const startTime = new Date(req.body.startTime).getTime();
     const endTime = new Date(req.body.startTime).getTime();
 
-    if(startTime == NaN){
+    if (startTime == NaN) {
       req.session.error = `${req.body.startTime} invalid Date string`;
-    }else if(endTime == NaN){
+    } else if (endTime == NaN) {
       req.session.error = `${req.body.endTime} invalid Date string`;
-    }else{
+    } else {
       config.startTime = startTime;
       config.endTime = endTime;
 
