@@ -57,4 +57,20 @@ const loadFullProblemData = dir => {
   return ret;
 };
 
-module.exports = loadProblems(__rootdir + "/problems");
+const combine = (...problems) => {
+  const problemData = [];
+  const fullProblemData = {};
+
+  problems.forEach(problemSet => {
+    problemSet.problemData.forEach(problem => {
+      problemData.push(problem);
+    });
+    Object.entries(problemSet.fullProblemData).forEach(([problemName, problem]) => {
+      fullProblemData[problemName] = problem;
+    });
+  })
+
+  return {problemData, fullProblemData};
+}
+
+module.exports = combine(loadProblems(__rootdir + "/problems"));
