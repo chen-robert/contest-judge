@@ -5,7 +5,6 @@ const config = require(__rootdir + "/config");
 const problemData = require(__rootdir + "/server/routes/problems.js");
 const { getAllSolves } = require(__rootdir + "/server/db");
 
-
 router.get("/scoreboard", (req, res) => {
   getAllSolves(rows => {
     const subs = rows.map(row => {
