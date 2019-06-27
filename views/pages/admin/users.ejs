@@ -3,7 +3,7 @@
   <head>
     <% include ../../partials/header %>
     <link rel="stylesheet" type="text/css" href="/styles/admin.css">
-    <script src="/scripts/admin.js"></script>
+    <script src="/scripts/admin/users.js"></script>
   </head>
   <body>
     <% include ../../partials/popup %>
@@ -41,9 +41,9 @@
               } value="advanced">Advanced</option>
             </select>
           </td>
-          <td class="submissions--delete">X</td>
+          <td class="submissions--delete" data-username="<%= user.username %>">X</td>
         </tr>
-        <% } %>
+        <% }) %>
       </tbody>
     </table>
   </body>

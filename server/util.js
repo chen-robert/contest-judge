@@ -8,4 +8,12 @@ const getPopups = session => {
   return { error, message };
 };
 
-module.exports = { getPopups };
+const renderWithPopups = (req, res, view, data = {}) => {
+  const { error, message } = getPopups(req.session);
+
+  console.log(view, data);
+  console.log({ ...data, error, message });
+  res.render(view, { ...data, error, message });
+};
+
+module.exports = { getPopups, renderWithPopups };

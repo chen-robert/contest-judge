@@ -15,7 +15,7 @@ const { fullProblemData } = require("./server/problemData").loadProblems(
   __dirname + "/problems"
 );
 const loadProblems = require(__rootdir + "/server/routes/problems.js")(config);
-const { getPopups } = require(__rootdir + "/server/util");
+const { renderWithPopups } = require(__rootdir + "/server/util");
 
 // Routes
 const enforceLogin = require(__rootdir + "/server/enforceLogin.js");
@@ -42,24 +42,18 @@ app.use("/login", require(__rootdir + "/server/routes/login.js"));
 
 // Require login
 app.use(enforceLogin);
-app.get("/", (req, res) => {
-  const { error, message } = getPopups(req.session);
+app.get("/", (req, res) =>
+  renderWithPopups(req, res, "pages/index", {
+    problems: loadProblems()
+  })
+);
 
-  res.render("pages/index", {
-    problems: loadProblems(),
-    error,
-    message
-  });
-});
-app.get("/scoreboard", (req, res) => {
-  const { error, message } = getPopups(req.session);
-
-  res.render("pages/scoreboard", {
-    error,
-    message
-  });
-});
-app.use("/api", require(__rootdir + "/server/routes/api.js")(config));
+app.get("/scoreboard", (req, res) =>
+  renderWithPopups(req, res, "pages/scoreboard", {
+    problems: loadProblems()
+  })
+);
+app.use("/api", require(__rootdir + "/server/routes/api")(config));
 app.get("/config", (req, res) => res.send(config));
 app.use(
   "/grader",
@@ -67,7 +61,7 @@ app.use(
 );
 
 // Require admin
-//app.use(enforceAdmin);
+app.use(enforceAdmin);
 app.use("/admin", require(__rootdir + "/server/routes/admin.js")(config));
 
 app.listen(PORT, () => console.log(`Started server at port ${PORT}`));
