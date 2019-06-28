@@ -8,8 +8,9 @@ const loadProblems = dir => {
 };
 const loadClientProblemData = dir => {
   const ret = [];
-  const defaultConf = require(dir + "/default.json");
   const config = require(dir + "/config.json");
+  const defaultConf = config.default;
+  
   config.problems.forEach(problem => {
     const problemDir = dir + "/" + problem;
 

@@ -1,8 +1,7 @@
 const router = require("express").Router();
 
-const config = require(__rootdir + "/config");
+const {problemData} = require(__rootdir + "/server/problemData");
 
-const problemData = require(__rootdir + "/server/routes/problems.js");
 const { getAllSolves } = require(__rootdir + "/server/db");
 
 router.get("/scoreboard", (req, res) => {

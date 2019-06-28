@@ -12,7 +12,7 @@ const bodyParser = require("body-parser");
 
 // Server
 const { fullProblemData } = require("./server/problemData");
-const problems = require(__rootdir + "/server/routes/problems");
+const loadProblems = require(__rootdir + "/server/problems");
 const { renderWithPopups } = require(__rootdir + "/server/util");
 
 // Routes
@@ -42,13 +42,13 @@ app.use("/login", require(__rootdir + "/server/routes/login.js"));
 app.use(enforceLogin);
 app.get("/", (req, res) =>
   renderWithPopups(req, res, "pages/index", {
-    problems
+    problems: loadProblems()
   })
 );
 
 app.get("/scoreboard", (req, res) =>
   renderWithPopups(req, res, "pages/scoreboard", {
-    problems
+    problems: loadProblems()
   })
 );
 app.use("/api", require(__rootdir + "/server/routes/api"));
@@ -60,6 +60,6 @@ app.use(
 
 // Require admin
 app.use(enforceAdmin);
-app.use("/admin", require(__rootdir + "/server/routes/admin.js")(config));
+app.use("/admin", require(__rootdir + "/server/routes/admin.js"));
 
 app.listen(PORT, () => console.log(`Started server at port ${PORT}`));

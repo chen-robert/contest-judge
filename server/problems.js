@@ -10,4 +10,4 @@ const loadProblems = () => {
   }
 };
 
-module.exports = loadProblems();
+module.exports = loadProblems;

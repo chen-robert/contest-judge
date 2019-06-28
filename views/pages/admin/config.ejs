@@ -17,12 +17,5 @@
       <textarea class="textarea form--input" name="data"><%= JSON.stringify(config, undefined, 2) %></textarea>
       <button class="form--button" type="submit">Submit</button>
     </form>
-    <form action="/admin/config/time" method="POST" class="form">
-      <label for="startTime">Start Time</label>
-      <input class="form--input" name="startTime" value="<%= prettyPrint(config.startTime) %>">
-      <label for="endTime">End Time</label>
-      <input class="form--input" name="endTime" value="<%= prettyPrint(config.endTime) %>">
-      <button class="form--button" type="submit">Submit</button>
-    </form>
   </body>
 </html>

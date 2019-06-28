@@ -12,9 +12,9 @@ const pad = num => {
   return num;
 };
 
-$.get("/config").then(({ start, end }) => {
-  const startTime = new Date(start).getTime();
-  const endTime = new Date(end).getTime();
+$.get("/config").then(({ startTime, endTime }) => {
+  startTime = new Date(startTime).getTime();
+  endTime = new Date(endTime).getTime();
 
   const $timeElem = $("#timer");
 
