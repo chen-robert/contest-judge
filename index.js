@@ -3,6 +3,8 @@ global.__rootdir = __dirname;
 // Config
 const PORT = process.env.PORT || 3000;
 const config = require(__dirname + "/config.json");
+console.info("Loaded config from ./config.json");
+console.info(JSON.stringify(config, undefined, 2));
 
 // Express
 const express = require("express");
@@ -46,15 +48,11 @@ app.get("/", (req, res) =>
 );
 
 app.get("/scoreboard", (req, res) =>
-  renderWithPopups(req, res, "pages/scoreboard", {
-  })
+  renderWithPopups(req, res, "pages/scoreboard", {})
 );
 app.use("/api", require(__rootdir + "/server/routes/api"));
 app.get("/config", (req, res) => res.send(config));
-app.use(
-  "/grader",
-  require(__rootdir + "/server/routes/grader.js")
-);
+app.use("/grader", require(__rootdir + "/server/routes/grader.js"));
 
 // Require admin
 app.use(enforceAdmin);

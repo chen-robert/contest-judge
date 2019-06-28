@@ -13,7 +13,7 @@ const loadProblems = dir => {
 const loadClientProblemData = (config, dir) => {
   const ret = [];
   const defaultConf = config.default;
-  
+
   config.problems.forEach(problem => {
     const problemDir = dir + "/" + problem;
 
@@ -71,10 +71,11 @@ const combine = problems => {
     Object.entries(problemSet.testData).forEach(([problemName, problem]) => {
       testData[problemName] = problem;
     });
-  })
+  });
 
-  return {problemData, testData};
-}
+  return { problemData, testData };
+};
 
-
-module.exports = combine(config.problemDirs.map(dir => loadProblems(__rootdir + dir)));
+module.exports = combine(
+  config.problemDirs.map(dir => loadProblems(__rootdir + dir))
+);

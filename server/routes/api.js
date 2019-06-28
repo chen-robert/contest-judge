@@ -1,6 +1,6 @@
 const router = require("express").Router();
 
-const {problemData} = require(__rootdir + "/server/problemData");
+const { problemData } = require(__rootdir + "/server/problemData");
 
 const { getAllSolves } = require(__rootdir + "/server/db");
 

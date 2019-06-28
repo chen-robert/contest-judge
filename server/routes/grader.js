@@ -1,11 +1,8 @@
 const fs = require("fs");
 const { testData } = require(__rootdir + "/server/problemData");
 
-const {
-  startGrading,
-  finishGrading,
-  getSolves
-} = require(__rootdir + "/server/db");
+const { startGrading, finishGrading, getSolves } = require(__rootdir +
+  "/server/db");
 const request = require("request");
 const router = require("express").Router();
 
@@ -17,7 +14,11 @@ const upload = require("multer")({
 });
 
 const api = process.env.CAMISOLE;
-console.log(`Using camsiole endpoint at ${api} (process.env.CAMISOLE)`);
+console.log(
+  api === undefined
+    ? "Warning: Camisole endpoint undefined (process.env.CAMISOLE)"
+    : `Using camsiole endpoint at ${api}`
+);
 
 const compileLimits = {
   "wall-time": 10
@@ -64,87 +65,86 @@ const status = (camisoleBody, expected) => {
   return "OK";
 };
 
+router.get("/submissions", (req, res) => {
+  getSolves(req.session.uid, rows => {
+    rows = rows.map(row => {
+      const data = {
+        uid: row.user_id,
+        problem: row.problem,
+        status: row.status,
+        time: row.time
+      };
 
-  router.get("/submissions", (req, res) => {
-    getSolves(req.session.uid, rows => {
-      rows = rows.map(row => {
-        const data = {
-          uid: row.user_id,
-          problem: row.problem,
-          status: row.status,
-          time: row.time
-        };
-
-        return data;
-      });
-
-      return res.send(rows);
+      return data;
     });
+
+    return res.send(rows);
   });
-  router.get("/user", (req, res) => res.send({ uid: req.session.uid }));
+});
+router.get("/user", (req, res) => res.send({ uid: req.session.uid }));
 
-  router.post(
-    "/submit",
-    (req, res, next) => {
-      upload.single("file")(req, res, err => {
-        if (err) {
-          req.session.error = "Invalid file";
-          return res.redirect("/");
-        }
-        next();
-      });
-    },
-    (req, res) => {
-      const tests = testData[req.body.pid];
-
-      if (req.file === undefined) {
-        req.session.error = "Please upload a file";
+router.post(
+  "/submit",
+  (req, res, next) => {
+    upload.single("file")(req, res, err => {
+      if (err) {
+        req.session.error = "Invalid file";
         return res.redirect("/");
       }
-      if (tests === undefined) {
-        req.session.error = "Unknown error. Please contact an admin.";
-        return res.redirect("/");
-      }
+      next();
+    });
+  },
+  (req, res) => {
+    const tests = testData[req.body.pid];
 
-      const data = fs.readFileSync(req.file.path, "utf8");
-      const expected = {};
-      for (let i = 0; i < tests.length; i++) {
-        expected[tests[i].name] = tests[i].stdout;
-      }
-
-      const time = startGrading(req.session.uid, req.body.pid);
-
-      request(
-        {
-          method: "POST",
-          body: {
-            lang: req.body.lang,
-            source: data,
-            compile: compileLimits,
-            execute: execLimits,
-            tests
-          },
-          json: true,
-          url: `http://${api}/run`
-        },
-        (err, response, body) => {
-          if (err) {
-            console.log(err);
-            req.session.error = "Grading error. Please contact an admin.";
-            return res.redirect("/");
-          }
-          finishGrading(
-            req.session.uid,
-            time,
-            req.body.pid,
-            status(body, expected)
-          );
-        }
-      );
-
-      req.session.message = "Successfully submitted";
+    if (req.file === undefined) {
+      req.session.error = "Please upload a file";
       return res.redirect("/");
     }
-  );
+    if (tests === undefined) {
+      req.session.error = "Unknown error. Please contact an admin.";
+      return res.redirect("/");
+    }
 
-  module.exports = router;
+    const data = fs.readFileSync(req.file.path, "utf8");
+    const expected = {};
+    for (let i = 0; i < tests.length; i++) {
+      expected[tests[i].name] = tests[i].stdout;
+    }
+
+    const time = startGrading(req.session.uid, req.body.pid);
+
+    request(
+      {
+        method: "POST",
+        body: {
+          lang: req.body.lang,
+          source: data,
+          compile: compileLimits,
+          execute: execLimits,
+          tests
+        },
+        json: true,
+        url: `http://${api}/run`
+      },
+      (err, response, body) => {
+        if (err) {
+          console.log(err);
+          req.session.error = "Grading error. Please contact an admin.";
+          return res.redirect("/");
+        }
+        finishGrading(
+          req.session.uid,
+          time,
+          req.body.pid,
+          status(body, expected)
+        );
+      }
+    );
+
+    req.session.message = "Successfully submitted";
+    return res.redirect("/");
+  }
+);
+
+module.exports = router;
