@@ -11,7 +11,6 @@ const lessMiddleware = require("less-middleware");
 const bodyParser = require("body-parser");
 
 // Server
-const { fullProblemData } = require("./server/problemData");
 const loadProblems = require(__rootdir + "/server/problems");
 const { renderWithPopups } = require(__rootdir + "/server/util");
 
@@ -48,14 +47,13 @@ app.get("/", (req, res) =>
 
 app.get("/scoreboard", (req, res) =>
   renderWithPopups(req, res, "pages/scoreboard", {
-    problems: loadProblems()
   })
 );
 app.use("/api", require(__rootdir + "/server/routes/api"));
 app.get("/config", (req, res) => res.send(config));
 app.use(
   "/grader",
-  require(__rootdir + "/server/routes/grader.js")(fullProblemData)
+  require(__rootdir + "/server/routes/grader.js")
 );
 
 // Require admin

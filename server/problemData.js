@@ -1,14 +1,17 @@
 const fs = require("fs");
+const config = require(__rootdir + "/config");
 
 const loadProblems = dir => {
+  const config = require(dir + "/config.json");
   return {
-    problemData: loadClientProblemData(dir),
-    fullProblemData: loadFullProblemData(dir)
+    problemData: loadClientProblemData(config, dir),
+    testData: loadTestData(config, dir),
+    config
   };
 };
-const loadClientProblemData = dir => {
+
+const loadClientProblemData = (config, dir) => {
   const ret = [];
-  const config = require(dir + "/config.json");
   const defaultConf = config.default;
   
   config.problems.forEach(problem => {
@@ -33,9 +36,8 @@ const loadClientProblemData = dir => {
   });
   return ret;
 };
-const loadFullProblemData = dir => {
+const loadTestData = (config, dir) => {
   const ret = {};
-  const config = require(dir + "/config.json");
   config.problems.forEach(problem => {
     const problemDir = dir + "/" + problem;
 
@@ -58,20 +60,21 @@ const loadFullProblemData = dir => {
   return ret;
 };
 
-const combine = (...problems) => {
+const combine = problems => {
   const problemData = [];
-  const fullProblemData = {};
+  const testData = {};
 
   problems.forEach(problemSet => {
     problemSet.problemData.forEach(problem => {
       problemData.push(problem);
     });
-    Object.entries(problemSet.fullProblemData).forEach(([problemName, problem]) => {
-      fullProblemData[problemName] = problem;
+    Object.entries(problemSet.testData).forEach(([problemName, problem]) => {
+      testData[problemName] = problem;
     });
   })
 
-  return {problemData, fullProblemData};
+  return {problemData, testData};
 }
 
-module.exports = combine(loadProblems(__rootdir + "/problems"));
+
+module.exports = combine(config.problemDirs.map(dir => loadProblems(__rootdir + dir)));

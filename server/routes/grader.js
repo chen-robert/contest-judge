@@ -1,10 +1,10 @@
 const fs = require("fs");
+const { testData } = require(__rootdir + "/server/problemData");
+
 const {
   startGrading,
   finishGrading,
-  getSolves,
-  getUserData,
-  getAllSolves
+  getSolves
 } = require(__rootdir + "/server/db");
 const request = require("request");
 const router = require("express").Router();
@@ -64,7 +64,7 @@ const status = (camisoleBody, expected) => {
   return "OK";
 };
 
-module.exports = problems => {
+
   router.get("/submissions", (req, res) => {
     getSolves(req.session.uid, rows => {
       rows = rows.map(row => {
@@ -95,7 +95,7 @@ module.exports = problems => {
       });
     },
     (req, res) => {
-      const tests = problems[req.body.pid];
+      const tests = testData[req.body.pid];
 
       if (req.file === undefined) {
         req.session.error = "Please upload a file";
@@ -146,5 +146,5 @@ module.exports = problems => {
       return res.redirect("/");
     }
   );
-  return router;
-};
+
+  module.exports = router;
