@@ -125,19 +125,20 @@ router.post(
           tests
         },
         json: true,
-        url: `http://${api}/run`
+        url: `${api}/run`
       },
       (err, response, body) => {
+        let code;
         if (err) {
-          console.log(err);
-          req.session.error = "Grading error. Please contact an admin.";
-          return res.redirect("/");
+          code = "ENDPOINT_ERROR";
+        }else{
+          code = status(body, expected);
         }
         finishGrading(
           req.session.uid,
           time,
           req.body.pid,
-          status(body, expected)
+          code
         );
       }
     );
