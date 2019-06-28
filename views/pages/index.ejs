@@ -10,16 +10,19 @@
     <% include ../partials/navbar %>
     
     <section class="problem-section">
+      <% 
+      const formatHash = name => name.toLowerCase().replace(/ /g, "-");
+      %>
       <div id="problem-list" class="problem-list">
         <% problems.forEach((problem, i) => { %>
-          <div class="problem-list--item" data-id="<%= i %>" data-name="<%= problem.name %>">
-            <a class="navbar--link" href="#problem-<%= problem.name %>"><%= problem.name %></a>
+          <div class="problem-list--item">
+            <a class="navbar--link" href="#<%= formatHash(problem.name) %>" data-id="<%= i %>" data-name="<%= problem.name %>"><%= problem.name %></a>
           </div>
         <% }) %>
       </div>
       <div id="problems">
         <% problems.forEach((problem, i) => { %>
-        <div data-id="<%= i %>" class="problem-statement" <%- i === 0? "": `style="display: none";` %>>
+        <div data-hash="<%= formatHash(problem.name) %>" data-id="<%= i %>" class="problem-statement" <%- i === 0? "": `style="display: none";` %>>
           <div class="problem--title"><%= problem.name %></div>
           <div class="problem--text"><%- problem.statement %></div>
         </div>

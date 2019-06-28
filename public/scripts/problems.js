@@ -6,15 +6,22 @@ window.MathJax = {
 };
 
 $(() => {
-  $(".problem-list--item").click(function(e) {
-    e.preventDefault();
-
+  $(".problem-list--item a").click(function(e) {
     $(".problem-statement").hide();
     const id = $(this).data("id");
-    $(`div[data-id=${id}]`).show();
+    $(`.problem-statement[data-id=${id}]`).show();
 
     $("#pid").val($(this).data("name"));
   });
+
+  // Substring 1 to remove the "#"
+  const hash = window.location.hash.substring(1);
+  const $target = $(`.problem-statement[data-hash=${hash}]`);
+  if($target.length !== 0){
+    $(".problem-statement").hide();
+    $target.show();
+  }
+
 });
 
 const submission = ({ problem, status }) => `
