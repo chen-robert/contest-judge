@@ -16,7 +16,7 @@ const upload = require("multer")({
 const api = process.env.CAMISOLE;
 console.log(
   api === undefined
-    ? "Warning: Camisole endpoint undefined (process.env.CAMISOLE)"
+    ? "WARNING: Camisole endpoint undefined (process.env.CAMISOLE)"
     : `Using camsiole endpoint at ${api}`
 );
 
