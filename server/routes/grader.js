@@ -134,6 +134,7 @@ router.post(
         }else{
           code = status(body, expected);
         }
+
         finishGrading(
           req.session.uid,
           time,
@@ -144,7 +145,7 @@ router.post(
     );
 
     req.session.message = "Successfully submitted";
-    return res.redirect("/");
+    return res.redirect("/#" + req.body.pid.toLowerCase().replace(/ /g, "-"));
   }
 );
 
