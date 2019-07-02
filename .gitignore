@@ -6,9 +6,8 @@ npm-debug.log
 # Uploaded files
 uploads
 
-# HTML
-dist/*
-!dist/*.html
+# Less files get compiled into css files. Ignore these.
+public/styles/*.css
 
 # Problems
 problems/*
