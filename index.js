@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(
   cookieSession({
     name: "session",
-    keys: [process.env.SECRET || "aria is nice"],
+    keys: [process.env.SECRET || "lorem ipsum"],
     maxAge: 24 * 60 * 60 * 1000
   })
 );

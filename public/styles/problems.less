@@ -1,3 +1,5 @@
+@import "config";
+
 .problem-section {
   width: 100%;
   display: flex;
@@ -7,7 +9,7 @@
   margin: 25px;
   padding: 25px;
   background-color: #eee;
-  box-shadow: 5px 5px 5px rgba(68, 68, 68, 0.6);
+  box-shadow: 0 5px 5px rgba(68, 68, 68, 0.6);
 
   & h1,
   h2,
@@ -51,4 +53,19 @@
   align-items: center;
   justify-content: center;
   padding: 15px;
+
+  font-size: 1.3em;
+}
+
+.problem-list--link{
+  color: #444;
+  text-decoration: none;
+  padding: 10px;
+
+  transition-duration: @animation-duration;
+
+  &:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+  }
 }

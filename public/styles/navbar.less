@@ -1,8 +1,9 @@
 .navbar {
   width: 100vw;
 
-  padding: 50px;
   display: flex;
+  box-shadow: 0 0.2px 10px rgba(0, 0, 0, 0.4);
+  margin-bottom: 50px;
 
   @media only screen and (max-width: @mobile-breakpoint) {
     padding: 50px 0;
@@ -10,12 +11,16 @@
   }
 }
 
-.navbar--link {
-  margin: 0 50px;
+.navbar--item {
+  padding: 10px 25px;
   text-decoration: none;
-  font-size: 1.3rem;
+  font-size: 1.1em;
   color: #444;
+}
+
+.navbar--item__link {
   position: relative;
+
 
   &:before {
     content: "";
@@ -36,10 +41,6 @@
   }
 }
 
-.navbar--timer {
-  flex-grow: 10;
-  text-align: right;
-
-  color: #444;
-  font-size: 1.3rem;
+.navbar--separator{
+  flex-grow: 100;
 }
