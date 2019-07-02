@@ -19,16 +19,15 @@ $(() => {
 
   // Substring 1 to remove the "#"
   const hash = window.location.hash.substring(1);
-  if(hash.length !== 0){
+  if (hash.length !== 0) {
     const $target = $(`.problem-statement[data-hash=${hash}]`);
-    if($target.length !== 0){
+    if ($target.length !== 0) {
       $(".problem-statement").hide();
       $target.show();
 
       $("#pid").val($target.data("name"));
     }
   }
-
 });
 
 const submission = ({ problem, status }) => `

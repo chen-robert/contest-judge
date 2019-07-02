@@ -99,53 +99,47 @@ router.post(
 
     if (req.file === undefined) {
       req.session.error = "Please upload a file";
-      return res.redirect("/");
-    }
-    if (tests === undefined) {
-      req.session.error = "Unknown error. Please contact an admin.";
-      return res.redirect("/");
-    }
-
-    const data = fs.readFileSync(req.file.path, "utf8");
-    const expected = {};
-    for (let i = 0; i < tests.length; i++) {
-      expected[tests[i].name] = tests[i].stdout;
-    }
-
-    const time = startGrading(req.session.uid, req.body.pid);
-
-    request(
-      {
-        method: "POST",
-        body: {
-          lang: req.body.lang,
-          source: data,
-          compile: compileLimits,
-          execute: execLimits,
-          tests
-        },
-        json: true,
-        url: `${api}/run`
-      },
-      (err, response, body) => {
-        let code;
-        if (err) {
-          code = "ENDPOINT_ERROR";
-        }else{
-          code = status(body, expected);
-        }
-
-        finishGrading(
-          req.session.uid,
-          time,
-          req.body.pid,
-          code
-        );
+    } else if (tests === undefined) {
+      req.session.error = "Testcases not available. Please contact an admin.";
+    } else {
+      const data = fs.readFileSync(req.file.path, "utf8");
+      const expected = {};
+      for (let i = 0; i < tests.length; i++) {
+        expected[tests[i].name] = tests[i].stdout;
       }
-    );
 
-    req.session.message = "Successfully submitted";
-    return res.redirect("/#" + req.body.pid.toLowerCase().replace(/ /g, "-"));
+      const time = startGrading(req.session.uid, req.body.pid);
+
+      request(
+        {
+          method: "POST",
+          body: {
+            lang: req.body.lang,
+            source: data,
+            compile: compileLimits,
+            execute: execLimits,
+            tests
+          },
+          json: true,
+          url: `${api}/run`
+        },
+        (err, response, body) => {
+          let code;
+          if (err) {
+            code = "ENDPOINT_ERROR";
+          } else {
+            code = status(body, expected);
+          }
+
+          finishGrading(req.session.uid, time, req.body.pid, code);
+        }
+      );
+
+      req.session.message = "Successfully submitted";
+    }
+    return res.redirect(
+      "/contest#" + req.body.pid.toLowerCase().replace(/ /g, "-")
+    );
   }
 );
 
