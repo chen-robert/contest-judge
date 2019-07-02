@@ -16,12 +16,12 @@ router.post("/", (req, res) => {
   checkLogin(req.body.username, req.body.password, (err, data) => {
     if (err) {
       req.session.error = err;
-      return res.redirect("/login");
+      return res.redirect("back");
     }
 
     req.session.uid = data.id;
     req.session.username = req.body.username;
-    return res.redirect("/");
+    return res.redirect("/contest");
   });
 });
 

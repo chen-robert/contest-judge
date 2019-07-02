@@ -12,18 +12,14 @@ const cookieSession = require("cookie-session");
 const lessMiddleware = require("less-middleware");
 const bodyParser = require("body-parser");
 
-// Server
-const loadProblems = require(__rootdir + "/server/problems");
-const { renderWithPopups } = require(__rootdir + "/server/util");
-
-// Routes
+// Access restrictions
 const enforceLogin = require(__rootdir + "/server/enforceLogin.js");
 const enforceAdmin = require(__rootdir + "/server/enforceAdmin.js");
 
 // Express app
 const app = express();
-
 app.set("view engine", "ejs");
+
 app.use(lessMiddleware(__dirname + "/public"));
 app.use(express.static(__dirname + "/public"));
 
@@ -38,21 +34,19 @@ app.use(
 
 // Public routes
 app.use("/login", require(__rootdir + "/server/routes/login.js"));
+app.get("/logout", (req, res) => {
+  req.session = null;
+  res.redirect("/login");
+})
 
 // Require login
 app.use(enforceLogin);
-app.get("/", (req, res) =>
-  renderWithPopups(req, res, "pages/index", {
-    problems: loadProblems()
-  })
-);
 
-app.get("/scoreboard", (req, res) =>
-  renderWithPopups(req, res, "pages/scoreboard", {})
-);
-app.use("/api", require(__rootdir + "/server/routes/api"));
 app.get("/config", (req, res) => res.send(config));
-app.use("/grader", require(__rootdir + "/server/routes/grader.js"));
+
+app.use("/contest", require(__rootdir + "/server/routes/contest"));
+app.use("/api", require(__rootdir + "/server/routes/api"));
+app.use("/grader", require(__rootdir + "/server/routes/grader"));
 
 // Require admin
 app.use(enforceAdmin);
