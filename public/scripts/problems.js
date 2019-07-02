@@ -2,6 +2,9 @@ window.MathJax = {
   tex2jax: {
     inlineMath: [["$", "$"], ["\\(", "\\)"]],
     processEscapes: true
+  },
+  CommonHTML: {
+    scale: 90
   }
 };
 

@@ -22,9 +22,9 @@
       </div>
       <div id="problems">
         <% problems.forEach((problem, i) => { %>
-        <div data-hash="<%= formatHash(problem.name) %>" data-id="<%= i %>" data-name="<%= problem.name %>" class="problem-statement" <%- i === 0? "": `style="display: none";` %>>
+        <div data-hash="<%= formatHash(problem.name) %>" data-id="<%= i %>" data-name="<%= problem.name %>" class="problem-statement <%= i === 0? "": "problem-statement__hidden" %>">
           <div class="problem--title"><%= problem.name %></div>
-          <div class="problem--text"><%- problem.statement %></div>
+          <div class="problem--text"><%- md.render(problem.statement) %></div>
         </div>
         <% }) %>
       </div>

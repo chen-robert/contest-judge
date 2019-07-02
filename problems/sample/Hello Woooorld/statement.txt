@@ -1,14 +1,14 @@
 Samuel is learning programming. Help him with a very simple task!
 
-<h2>Input Format</h2>
+## Input Format
 One integer $N$, $(1 \leq N \leq 100,000)$. 
 
-<h2>Output Format</h2>
+## Output Format
 Print "Hello W0rld!" $N$ times, once per line
 
-<h2>Sample Input</h2>
+## Sample Input
 2
 
-<h2>Sample Output</h2>
+## Sample Output
 Hello W0rld!
 Hello W0rld!
