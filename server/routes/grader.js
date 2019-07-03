@@ -23,6 +23,7 @@ console.log(
 const compileLimits = {
   "wall-time": 10
 };
+
 const execLimits = {
   time: 10,
   "wall-time": 10,
@@ -33,14 +34,7 @@ const execLimits = {
 const compare = (a, b) => {
   return clean(a) === clean(b);
 };
-const clean = a =>
-  a
-    .trim()
-    .split("\r")
-    .join("")
-    .split("\n")
-    .map(a => a.trim())
-    .join("");
+const clean = a => a.trim().replace(/\r/g, "");
 
 const status = (camisoleBody, expected) => {
   if (camisoleBody.compile) {
