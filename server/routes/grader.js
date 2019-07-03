@@ -1,4 +1,8 @@
 const fs = require("fs");
+const Joi = require("@hapi/joi");
+
+const config = require(__rootdir + "/config");
+
 const { testData } = require(__rootdir + "/server/problemData");
 
 const { startGrading, finishGrading, getSolves } = require(__rootdir +
@@ -77,6 +81,14 @@ router.get("/submissions", (req, res) => {
 });
 router.get("/user", (req, res) => res.send({ uid: req.session.uid }));
 
+const graderSchema = Joi.object().keys({
+  pid: Joi.string().required(),
+  lang: Joi.string()
+    .valid(config.languages)
+    .required(),
+  file: Joi.any()
+});
+
 router.post(
   "/submit",
   (req, res, next) => {
@@ -89,51 +101,58 @@ router.post(
     });
   },
   (req, res) => {
-    const tests = testData[req.body.pid];
-
-    if (req.file === undefined) {
-      req.session.error = "Please upload a file";
-    } else if (tests === undefined) {
-      req.session.error = "Testcases not available. Please contact an admin.";
-    } else {
-      const data = fs.readFileSync(req.file.path, "utf8");
-      const expected = {};
-      for (let i = 0; i < tests.length; i++) {
-        expected[tests[i].name] = tests[i].stdout;
+    graderSchema.validate(req.body, (err, val) => {
+      if(err){
+        return res.status(400).send("Invalid parameters");
       }
+      const {pid, lang} = req.body;
 
-      const time = startGrading(req.session.uid, req.body.pid);
+      const tests = testData[pid];
 
-      request(
-        {
-          method: "POST",
-          body: {
-            lang: req.body.lang,
-            source: data,
-            compile: compileLimits,
-            execute: execLimits,
-            tests
-          },
-          json: true,
-          url: `${api}/run`
-        },
-        (err, response, body) => {
-          let code;
-          if (err) {
-            code = "ENDPOINT_ERROR";
-          } else {
-            code = status(body, expected);
-          }
-
-          finishGrading(req.session.uid, time, req.body.pid, code);
+      if (req.file === undefined) {
+        req.session.error = "Please upload a file";
+      } else if (tests === undefined) {
+        req.session.error = "Testcases not available. Please contact an admin.";
+      } else {
+        const data = fs.readFileSync(req.file.path, "utf8");
+        const expected = {};
+        for (let i = 0; i < tests.length; i++) {
+          expected[tests[i].name] = tests[i].stdout;
         }
-      );
 
-      req.session.message = "Successfully submitted";
-    }
-    return res.redirect(
-      "/contest#" + req.body.pid.toLowerCase().replace(/ /g, "-")
-    );
+        const time = startGrading(req.session.uid, pid);
+
+        request(
+          {
+            method: "POST",
+            body: {
+              lang: lang,
+              source: data,
+              compile: compileLimits,
+              execute: execLimits,
+              tests
+            },
+            json: true,
+            url: `${api}/run`
+          },
+          (err, response, body) => {
+            let code;
+            if (err) {
+              code = "ENDPOINT_ERROR";
+            } else {
+              code = status(body, expected);
+            }
+
+            finishGrading(req.session.uid, time, pid, code);
+          }
+        );
+
+        req.session.message = "Successfully submitted";
+      }
+      return res.redirect(
+        "/contest#" + pid.toLowerCase().replace(/ /g, "-")
+      );
+    });
   }
 );
 

@@ -4,7 +4,10 @@ const { renderWithPopups } = require(__rootdir + "/server/util");
 
 const fs = require("fs");
 const updateConfigFile = () => {
-  fs.writeFileSync(__rootdir + "/config.json", JSON.stringify(config));
+  fs.writeFileSync(
+    __rootdir + "/config.json",
+    JSON.stringify(config, undefined, 2)
+  );
 };
 
 router.get("/", (req, res) =>

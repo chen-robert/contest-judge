@@ -9,12 +9,13 @@
     "db:init": "node server/db/init.js",
     "dev": "nodemon -e js,ejs,less,txt,in,out,json --watch index.js --watch server --watch problems index.js",
     "heroku-postbuild": "npm run build",
-    "format": "prettier \"**/*.{js,less,html}\" --write",
+    "format": "prettier \"**/*.{js,less}\" --write",
     "start": "node index.js"
   },
   "author": "Robert Chen",
   "license": "MIT",
   "dependencies": {
+    "@hapi/joi": "^15.1.0",
     "async": "^3.1.0",
     "autoprefixer": "^9.6.0",
     "bcryptjs": "^2.4.3",

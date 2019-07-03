@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const Joi = require("@hapi/joi");
 
 const { getPopups } = require(__rootdir + "/server/util");
 const { checkLogin } = require(__rootdir + "/server/db");
@@ -12,16 +13,27 @@ router.get("/", (req, res) => {
   });
 });
 
-router.post("/", (req, res) => {
-  checkLogin(req.body.username, req.body.password, (err, data) => {
-    if (err) {
-      req.session.error = err;
-      return res.redirect("back");
-    }
+const loginSchema = Joi.object().keys({
+  username: Joi.string().required(),
+  password: Joi.string().required()
+});
 
-    req.session.uid = data.id;
-    req.session.username = req.body.username;
-    return res.redirect("/contest");
+router.post("/", (req, res) => {
+  loginSchema.validate(req.body, (err, val) => {
+    if (err) {
+      return res.status(400).send("Invalid login parameters");
+    }
+    const { username, password } = val;
+    checkLogin(username, password, (err, data) => {
+      if (err) {
+        req.session.error = err;
+        return res.redirect("back");
+      }
+
+      req.session.uid = data.id;
+      req.session.username = username;
+      return res.redirect("/contest");
+    });
   });
 });
 
