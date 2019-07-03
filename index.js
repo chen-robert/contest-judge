@@ -25,6 +25,8 @@ app.use(lessMiddleware(__dirname + "/public"));
 app.use(express.static(__dirname + "/public"));
 
 app.use(xssFilter());
+app.disable('x-powered-by');
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(
   cookieSession({
