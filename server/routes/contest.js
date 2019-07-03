@@ -2,7 +2,6 @@ const loadProblems = require(__rootdir + "/server/problems");
 const { renderWithPopups } = require(__rootdir + "/server/util");
 
 const { languages } = require(__rootdir + "/config");
-console.log(languages);
 
 const md = new require("markdown-it")();
 

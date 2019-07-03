@@ -3,22 +3,35 @@ const config = require(__rootdir + "/config");
 
 const loadProblems = dir => {
   const config = require(dir + "/config.json");
+
+  const {testData, problemData} = loadData(config, dir);
   return {
-    problemData: loadClientProblemData(config, dir),
-    testData: loadTestData(config, dir),
+    testData,
+    problemData, 
     config
   };
 };
 
-const loadClientProblemData = (config, dir) => {
-  const ret = [];
+const loadData = (config, dir) => {
+  const problemData = [];
+  const testData = {};
+
   const defaultConf = config.default;
 
-  config.problems.forEach(problem => {
+  const problemDirs = config.problems || fs.readdirSync(dir);
+  const excludedDirs = config.excluded || [];
+
+  problemDirs
+    .filter(problem => !excludedDirs.includes(problem))
+    .forEach(problem => {
     const problemDir = dir + "/" + problem;
 
-    if (!fs.lstatSync(problemDir).isDirectory()) return;
+    if (!fs.lstatSync(problemDir).isDirectory()) {
+      console.error(`Attempted to load problems from ${problemDir} but not a directory`);
+      return;
+    }
 
+    // Load problemData
     const statement = fs.readFileSync(problemDir + "/statement.txt", "utf8");
     const config = Object.assign(
       {},
@@ -27,22 +40,14 @@ const loadClientProblemData = (config, dir) => {
         ? require(problemDir + "/config.json")
         : {}
     );
-    const problemData = {
+    const currProblemData = {
       name: problem,
       statement,
       config
     };
-    ret.push(problemData);
-  });
-  return ret;
-};
-const loadTestData = (config, dir) => {
-  const ret = {};
-  config.problems.forEach(problem => {
-    const problemDir = dir + "/" + problem;
+    problemData.push(currProblemData);
 
-    if (!fs.lstatSync(problemDir).isDirectory()) return;
-
+    // Load test cases
     const tests = [];
     let i = 0;
     while (fs.existsSync(`${problemDir}/data/${i}.in`)) {
@@ -54,11 +59,11 @@ const loadTestData = (config, dir) => {
 
       i++;
     }
-
-    ret[problem] = tests;
+    testData[problem] = tests;
   });
-  return ret;
-};
+
+  return {testData, problemData};
+}
 
 const combine = problems => {
   const problemData = [];
