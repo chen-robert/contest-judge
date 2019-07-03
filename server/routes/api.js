@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const config = require(__rootdir + "/config");
 
 const { problemData } = require(__rootdir + "/server/problemData");
 
@@ -6,6 +7,8 @@ const { getAllSolves } = require(__rootdir + "/server/db");
 
 router.get("/scoreboard", (req, res) => {
   getAllSolves(rows => {
+    rows = rows.filter(({time}) => time < new Date(config.endTime).getTime());
+
     const subs = rows.map(row => {
       const data = {
         uid: row.user_id,

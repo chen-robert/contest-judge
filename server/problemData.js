@@ -27,7 +27,6 @@ const loadData = (config, dir) => {
     const problemDir = dir + "/" + problem;
 
     if (!fs.lstatSync(problemDir).isDirectory()) {
-      console.error(`Attempted to load problems from ${problemDir} but not a directory`);
       return;
     }
 
