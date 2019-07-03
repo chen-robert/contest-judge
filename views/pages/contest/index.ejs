@@ -37,12 +37,10 @@
         >
           <input id="pid" style="display: none;" name="pid" value="<%= problems[0].name %>"/>
           <select class="form--button" name="lang">
-            <option value="java">Java</option>
-            <option value="javascript">Javascript</option>
-            <option value="c">C</option>
-            <option value="c++">C++</option>
-            <option value="c#">C#</option>
-            <option value="python">Python 3</option>
+            <% const captalize = str => str.charAt(0).toUpperCase() + str.substring(1) %>
+            <% languages.forEach(lang => { %>
+              <option value="<%= lang %>"><%= captalize(lang) %></option>
+            <% }) %>
           </select>
           <input class="form--button" type="file" name="file" />
           <button class="form--button form--button__align-right" type="submit">
