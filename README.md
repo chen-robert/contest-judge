@@ -1,22 +1,26 @@
 # contest-judge
 
-A minimalistic programming judge built on top of [camisole's judging API](https://github.com/prologin/camisole). 
+A minimalistic programming judge built on top of [camisole's judging API](https://github.com/prologin/camisole).  An express application built on a postgreSQL database, rendered with [EJS](https://ejs.co/).
 
 ## Directory Structure
 
-HTML files can be found in `./dist`. 
-Javascript and CSS are found in `./client`.
-Serverside code is found in `/server`. 
-Sample problems can be found in `/problems`. 
-
-The files are compiled with webpack.
+EJS template files can be found in `/views`.
+Static files can be found in `/public`. Scripts are located in `/public/scripts` and styles in `/public/styles`.
+Styles are written with [less](http://lesscss.org/) and compiled with [express middleware](https://github.com/emberfeather/less.js-middleware) at runtime.
+Serverside scripts are located in `/server`, with the main file at `/index.js`.
+The configuration file can be located at `/config.json`.
 
 ## Running
-```
-npm install
-npm run build
-npm start
+
+```bash
+$ npm install
+$ export PORT=1234
+$ npm start
 ```
 
 ## Development
-`npm run build-dev` and `npm run dev-server` watch the directory for changes and will automatically update the instance. 
+
+```bash
+$ npm run dev
+```
+will restart the server on changes. 
