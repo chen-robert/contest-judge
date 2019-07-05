@@ -7,7 +7,7 @@ console.log(connectionString);
 const client = new Client({ connectionString });
 client.connect();
 
-const queries = ["DELETE FROM solves WHERE problem = 'Sorting Strings' "];
+const queries = ["DELETE FROM solves WHERE problem = 'Fibonecci v2' "];
 
 async.eachSeries(
   queries,
