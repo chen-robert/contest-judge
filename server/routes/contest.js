@@ -19,4 +19,6 @@ router.get("/scoreboard", (req, res) =>
   renderWithPopups(req, res, "pages/contest/scoreboard")
 );
 
+router.get("/tutorial", (req, res) => renderWithPopups(req, res, "pages/contest/tutorial"));
+
 module.exports = router;

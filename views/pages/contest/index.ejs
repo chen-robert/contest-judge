@@ -22,10 +22,13 @@
       </div>
       <div id="problems">
         <% problems.forEach((problem, i) => { %>
-        <div data-hash="<%= formatHash(problem.name) %>" data-id="<%= i %>" data-name="<%= problem.name %>" class="problem-statement <%= i === 0? "": "problem-statement__hidden" %>">
-          <div class="problem--title"><%= problem.name %></div>
-          <div class="problem--text"><%- md.render(problem.statement) %></div>
-        </div>
+          <div data-hash="<%= formatHash(problem.name) %>" data-id="<%= i %>" data-name="<%= problem.name %>" class="problem-statement <%= i === 0? "": "problem-statement__hidden" %>">
+            <div class="problem--title"><%= problem.name %></div>
+            <% if(problem.config.author) { %>
+              <div class="problem--author">By <%= problem.config.author %></div>
+            <% } %>
+            <div class="problem--text"><%- md.render(problem.statement) %></div>
+          </div>
         <% }) %>
       </div>
       <div class="problem-submit">
