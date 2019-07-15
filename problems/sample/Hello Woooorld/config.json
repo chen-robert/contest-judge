@@ -1,4 +1,5 @@
 {
   "sample": true,
-  "penalty": 0
+  "penalty": 0,
+  "difficulty": "bronze"
 }
