@@ -102,10 +102,10 @@ router.post(
   },
   (req, res) => {
     graderSchema.validate(req.body, (err, val) => {
-      if(err){
+      if (err) {
         return res.status(400).send("Invalid parameters");
       }
-      const {pid, lang} = req.body;
+      const { pid, lang } = req.body;
 
       const tests = testData[pid];
 
@@ -149,9 +149,7 @@ router.post(
 
         req.session.message = "Successfully submitted";
       }
-      return res.redirect(
-        "/contest#" + pid.toLowerCase().replace(/ /g, "-")
-      );
+      return res.redirect("/contest#" + pid.toLowerCase().replace(/ /g, "-"));
     });
   }
 );

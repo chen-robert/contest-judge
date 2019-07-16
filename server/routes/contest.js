@@ -21,11 +21,17 @@ router.get("/scoreboard", (req, res) =>
   renderWithPopups(req, res, "pages/contest/scoreboard")
 );
 
-const samples = fs.readdirSync(__rootdir + "/problems/sample/Hello Woooorld/solution");
-router.get("/about", (req, res) => renderWithPopups(req, res, "pages/contest/about", {
-  samples, 
-  sampleProblem: loadProblems().filter(problem => problem.name === "Hello Woooorld")[0],
-  md
-}));
+const samples = fs.readdirSync(
+  __rootdir + "/problems/sample/Hello Woooorld/solution"
+);
+router.get("/about", (req, res) =>
+  renderWithPopups(req, res, "pages/contest/about", {
+    samples,
+    sampleProblem: loadProblems().filter(
+      problem => problem.name === "Hello Woooorld"
+    )[0],
+    md
+  })
+);
 
 module.exports = router;

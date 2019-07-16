@@ -7,8 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "echo none",
     "db:init": "node server/db/init.js",
+    "pdata:gen": "node server/scripts/problemDataGeneration.js",
     "dev": "nodemon -e js,ejs,less,txt,in,out,json --watch index.js --watch server --watch problems index.js",
-    "heroku-postbuild": "npm run build",
     "format": "prettier \"**/*.{js,less}\" --write",
     "start": "node index.js"
   },

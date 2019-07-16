@@ -7,7 +7,7 @@ const { getAllSolves } = require(__rootdir + "/server/db");
 
 router.get("/scoreboard", (req, res) => {
   getAllSolves(rows => {
-    rows = rows.filter(({time}) => time < new Date(config.endTime).getTime());
+    rows = rows.filter(({ time }) => time < new Date(config.endTime).getTime());
 
     const subs = rows.map(row => {
       const data = {

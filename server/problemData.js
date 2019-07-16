@@ -4,10 +4,10 @@ const config = require(__rootdir + "/config");
 const loadProblems = dir => {
   const config = require(dir + "/config.json");
 
-  const {testData, problemData} = loadData(config, dir);
+  const { testData, problemData } = loadData(config, dir);
   return {
     testData,
-    problemData, 
+    problemData,
     config
   };
 };
@@ -24,45 +24,45 @@ const loadData = (config, dir) => {
   problemDirs
     .filter(problem => !excludedDirs.includes(problem))
     .forEach(problem => {
-    const problemDir = dir + "/" + problem;
+      const problemDir = dir + "/" + problem;
 
-    if (!fs.lstatSync(problemDir).isDirectory()) {
-      return;
-    }
+      if (!fs.lstatSync(problemDir).isDirectory()) {
+        return;
+      }
 
-    // Load problemData
-    const statement = fs.readFileSync(problemDir + "/statement.txt", "utf8");
-    const config = Object.assign(
-      {},
-      defaultConf,
-      fs.existsSync(problemDir + "/config.json")
-        ? require(problemDir + "/config.json")
-        : {}
-    );
-    const currProblemData = {
-      name: problem,
-      statement,
-      config
-    };
-    problemData.push(currProblemData);
+      // Load problemData
+      const statement = fs.readFileSync(problemDir + "/statement.txt", "utf8");
+      const config = Object.assign(
+        {},
+        defaultConf,
+        fs.existsSync(problemDir + "/config.json")
+          ? require(problemDir + "/config.json")
+          : {}
+      );
+      const currProblemData = {
+        name: problem,
+        statement,
+        config
+      };
+      problemData.push(currProblemData);
 
-    // Load test cases
-    const tests = [];
-    let i = 0;
-    while (fs.existsSync(`${problemDir}/data/${i}.in`)) {
-      tests.push({
-        name: `test_${i}`,
-        stdin: fs.readFileSync(`${problemDir}/data/${i}.in`).toString(),
-        stdout: fs.readFileSync(`${problemDir}/data/${i}.out`).toString()
-      });
+      // Load test cases
+      const tests = [];
+      let i = 0;
+      while (fs.existsSync(`${problemDir}/data/${i}.in`)) {
+        tests.push({
+          name: `test_${i}`,
+          stdin: fs.readFileSync(`${problemDir}/data/${i}.in`).toString(),
+          stdout: fs.readFileSync(`${problemDir}/data/${i}.out`).toString()
+        });
 
-      i++;
-    }
-    testData[problem] = tests;
-  });
+        i++;
+      }
+      testData[problem] = tests;
+    });
 
-  return {testData, problemData};
-}
+  return { testData, problemData };
+};
 
 const combine = problems => {
   const problemData = [];
