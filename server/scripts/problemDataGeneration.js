@@ -73,12 +73,16 @@ const prepare = problemDir => {
     console.log(`Multiple .java files in ${problemDir}/solution, aborting`);
     return false;
   }
-  execSync(`javac ${problemDir}/solution/${javaFiles[0]}`);
+  execSync(`javac "${problemDir}/solution/${javaFiles[0]}"`);
 
-  return `java -cp ${problemDir}/solution ${javaFiles[0].split(".")[0]}`;
+  return `java -cp "${problemDir}/solution" ${javaFiles[0].split(".")[0]}`;
 };
 
 const generateData = problemDir => {
+  if (!fs.existsSync(problemDir + "/data/generated")) {
+    fs.mkdirSync(problemDir + "/data/generated");
+  }
+
   const solveScript = prepare(problemDir);
   if (!solveScript) return;
 
@@ -243,9 +247,6 @@ const generateData = problemDir => {
       inputStr += genOutput();
     }
 
-    if (!fs.existsSync(problemDir + "/data/generated"))
-      fs.mkdirSync(problemDir + "/data/generated");
-
     const dataBase = `${problemDir}/data/generated/${caseNum}`;
     const inputFile = dataBase + ".in";
     const outputFile = dataBase + ".out";
@@ -254,7 +255,7 @@ const generateData = problemDir => {
       fs.writeFileSync(inputFile, inputStr);
       fs.writeFileSync(outputFile, "");
 
-      execSync(`${solveScript} < ${inputFile} > ${outputFile}`);
+      execSync(`${solveScript} < "${inputFile}" > "${outputFile}"`);
     }
   }
 };

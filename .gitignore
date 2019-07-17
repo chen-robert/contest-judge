@@ -12,3 +12,7 @@ public/styles/*.css
 # Problems
 problems/*
 !problems/sample
+
+# Used in problem generation
+**/generated
+*.class

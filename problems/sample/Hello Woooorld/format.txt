@@ -1,0 +1,9 @@
+# Config
+count: 3
+---
+
+# Variable declaration 
+VAR N {1:1e5}
+
+# Input Format
+> N
