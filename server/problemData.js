@@ -48,16 +48,23 @@ const loadData = (config, dir) => {
 
       // Load test cases
       const tests = [];
-      let i = 0;
-      while (fs.existsSync(`${problemDir}/data/${i}.in`)) {
-        tests.push({
-          name: `test_${i}`,
-          stdin: fs.readFileSync(`${problemDir}/data/${i}.in`).toString(),
-          stdout: fs.readFileSync(`${problemDir}/data/${i}.out`).toString()
-        });
 
-        i++;
-      }
+      const loadTestCases = dataBase => {
+        let i = 0;
+        while (fs.existsSync(`${dataBase}/${i}.in`)) {
+          tests.push({
+            name: `test_${tests.length}`,
+            stdin: fs.readFileSync(`${dataBase}/${i}.in`).toString(),
+            stdout: fs.readFileSync(`${dataBase}/${i}.out`).toString()
+          });
+
+          i++;
+        }
+      };
+
+      loadTestCases(`${problemDir}/data`);
+      loadTestCases(`${problemDir}/data/generated`);
+
       testData[problem] = tests;
     });
 
