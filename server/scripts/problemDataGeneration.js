@@ -1,6 +1,8 @@
 const readline = require("readline");
 const fs = require("fs");
 const path = require("path");
+const { execSync } = require('child_process');
+
 const {randInt} = require("./rng.js");
 
 const __rootdir = path.resolve(__dirname, "../..");
@@ -11,18 +13,21 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
+let override;
 const prompt = () =>
   rl.question("Override existing problem data? [y/N] ", answer => {
     if (/^(y|yes)$/i.test(answer)) {
-      genProblemData(true);
+      override = true;
+      genProblemData();
     } else if (/^(n|no)$/i.test(answer)) {
-      genProblemData(false);
+      override = false;
+      genProblemData();
     } else {
       prompt();
     }
   });
 
-const genProblemData = override => {
+const genProblemData = () => {
   config.problemDirs.forEach(problemDir => {
     loadData(__rootdir + problemDir);
   });
@@ -50,7 +55,33 @@ const loadData = problemsDir => {
     .forEach(problem => generateData(`${problemsDir}/${problem}`))
 };
 
+const prepare = problemDir => {
+  if(override) {
+    console.log(`Removing all data in ${problemDir}/data`);
+    fs.readdirSync(`${problemDir}/data`).forEach(file => {
+      fs.unlinkSync(`${problemDir}/data/${file}`);
+    });
+  }
+
+  const javaFiles = fs.readdirSync(problemDir + "/solution")
+    .filter(file => file.endsWith(".java"));
+    
+  if(javaFiles.length === 0){
+    console.log(`No .java files in ${problemDir}/solution, aborting`);
+    return false;
+  }else if(javaFiles.length > 1) {
+    console.log(`Multiple .java files in ${problemDir}/solution, aborting`);
+    return false;
+  } 
+  execSync(`javac ${problemDir}/solution/${javaFiles[0]}`);
+
+  return `java -cp ${problemDir}/solution ${javaFiles[0].split(".")[0]}`; 
+}
+
 const generateData = problemDir => {
+  const solveScript = prepare(problemDir);
+  if(!solveScript) return;
+
   const problemName = path.basename(problemDir);
 
   const lines = fs.readFileSync(`${problemDir}/format.txt`)
@@ -83,7 +114,7 @@ const generateData = problemDir => {
   const startingIndex = i;
   for(let caseNum = 0; caseNum < cases; caseNum++){
     i = startingIndex;
-    
+
     const vars = {};
 
     const getValue = str => {
@@ -144,53 +175,64 @@ const generateData = problemDir => {
         case "end":
           return END_BLOCK;
         case "times":
-          let ret = "";
+          {
+            let ret = "";
 
-          const reps = getValue(parts[1]);
-          const oriIndex = [i];
-          for(var j = 0; j < reps; j++){
-            i = oriIndex;
+            const reps = getValue(parts[1]);
+            const oriIndex = i;
 
-            res = "";
-            part = "";
+            for(var j = 0; j < reps; j++){
+              i = oriIndex;
+
+              let res = "";
+              let part = "";
+              do{
+                res += part;
+
+                const tmp = genOutput();
+                part = tmp;
+              } while(part !== END_BLOCK);
+              ret += res;
+            }
+            return ret;
+          }
+
+        case "if":
+          {
+            let condition = parts.slice(1).join("");
+
+            let negate = false;
+            if(condition.startsWith("!")){
+              condition = condition.substring(1);
+              negate = true;
+            }
+
+            let truthiness;
+            if(condition.includes(">")){
+              const parts = condition.split(">");
+              truthiness = getValue(parts[0]) > getValue(parts[1]);
+            }else if(condition.includes("==")){
+              const parts = condition.split("==");
+              truthiness = getValue(parts[0]) == getValue(parts[1]);
+            } else if(condition.includes("<")) {
+              const parts = condition.split("<");
+              truthiness = getValue(parts[0]) < getValue(parts[1]);
+            }else{
+              console.log("Invalid condition: " + condition);
+              process.exit();
+            }
+
+            if(negate) truthiness = !truthiness;
+
+            let res = "";
+            let part = "";
             do{
               res += part;
 
               part = genOutput();
             } while(part !== END_BLOCK);
-            ret += res;
+            return truthiness ? res: "";
           }
-          return ret;
-        case "if":
-          let condition = parts.slice(1).join("");
-          let negate = false;
-          if(condition.startsWith("!")){
-            condition = condition.substring(1);
-            negate = true;
-          }
-
-          let truthiness;
-          if(condition.includes(">")){
-            const parts = condition.split(">");
-            truthiness = getValue(parts[0]) > getValue(parts[1]);
-          }else if(condition.includes("==")){
-            const parts = condition.split("==");
-            truthiness = getValue(parts[0]) == getValue(parts[1]);
-          } else if(condition.includes("<")) {
-            const parts = condition.split("<");
-            truthiness = getValue(parts[0]) < getValue(parts[1]);
-          }
-
-          if(negate) truthiness = !truthiness;
-
-          res = "";
-          part = "";
-          do{
-            res += part;
-
-            part = genOutput();
-          } while(part !== END_BLOCK);
-          return truthiness ? res: "";
         default:
           return "";
       }
@@ -200,6 +242,15 @@ const generateData = problemDir => {
     while(i != lines.length) {
       inputStr += genOutput();
     }
+    
+    const dataBase = `${problemDir}/data/${caseNum}`;
+    const inputFile = dataBase + ".in";
+    const outputFile = dataBase + ".out";
+
+    fs.writeFileSync(inputFile, inputStr);
+    fs.writeFileSync(outputFile, "");
+    
+    execSync(`${solveScript} < ${inputFile} > ${outputFile}`)
   }
 }
 

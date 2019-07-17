@@ -1,6 +1,13 @@
 # contest-judge
 
-A minimalistic programming judge built on top of [camisole's judging API](https://github.com/prologin/camisole).  An express application built on a postgreSQL database, rendered with [EJS](https://ejs.co/).
+A minimalisic programming judge built on top of [camisole's judging API](https://github.com/prologin/camisole).  An express application built on a postgreSQL database, rendered with [EJS](https://ejs.co/).
+
+## Features
+
+- Automatic problem data generation in one command `npm run pdata:gen`
+- Admin interface for editting users / configuration
+- Easy, highly configurable problem writing
+
 
 ## Directory Structure
 
@@ -14,8 +21,7 @@ The configuration file can be located at `/config.json`.
 
 ```bash
 $ npm install
-$ export PORT=1234
-$ npm start
+$ PORT=1234 npm start
 ```
 
 ## Development
@@ -23,4 +29,11 @@ $ npm start
 ```bash
 $ npm run dev
 ```
-will restart the server on changes. 
+
+will restart the server on changes.
+
+## Problem Configuration
+
+Problems are loaded through seperate directories, specified through the `problemDirs` of the root config. An example problem directory can be found in `problems/sample`. Note that the problem directories don't necessarily have to be under `problems`, though this may help with organization.
+
+Each directory has its own config file.
