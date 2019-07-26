@@ -54,7 +54,7 @@ router.get("/scoreboard", (req, res) => {
           }
         });
 
-      const incorrect = subs
+      subs
         .filter(sub => sub.uid === uid)
         .filter(sub => sub.status !== "OK" && sub.status !== "GRADING")
         .filter(
@@ -62,7 +62,11 @@ router.get("/scoreboard", (req, res) => {
             correctTimes[sub.problem] === undefined ||
             sub.time < correctTimes[sub.problem]
         )
-        .forEach(sub => (score -= problemToConfig[sub.problem].penalty));
+        .forEach(sub => {
+          if(problemToConfig[sub.problem] !== undefined) {
+            score -= problemToConfig[sub.problem].penalty;
+          }
+        });
 
       return {
         username: idToUser[uid].username,
