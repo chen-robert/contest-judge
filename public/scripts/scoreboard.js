@@ -8,6 +8,7 @@ const scoreboardItem = ({ username, score, division }) => `
 
 const updateScoreboard = () => {
   $.get("/api/scoreboard").then(entries => {
+    for(var i = 0; i < 10; i++) entries.push(entries[0]);
     $("#scoreboard").html(entries.map(sub => scoreboardItem(sub)).join("\n"));
   });
 };

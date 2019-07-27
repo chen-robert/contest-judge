@@ -1,21 +1,36 @@
-.submissions {
+.table {
   width: 100%;
-  text-align: center;
 
   border-collapse: collapse;
-  & th,
+
+  & th {
+    padding: 10px;
+  }
   & td {
-    border-bottom: 1px solid #eee;
+    padding: 5px;
+  }
+
+  & tr:not(:last-child) {
+    border-bottom: 1px solid #aaa;
+  }
+
+  & tbody tr{
+    &:hover {
+      background-color: #eee;
+    }
   }
 }
 
-.submissions--row {
-  &:hover {
-    background-color: #eee;
+.table__submissions {
+  margin: 0 25px;
+
+  & tbody td:nth-child(2) {
+    text-align: right;
   }
 }
 
-.submissions--input {
+.table__scoreboard {
+  max-width: 500px;
 }
 
 .scoreboard-section {
@@ -24,10 +39,6 @@
 
   display: flex;
   justify-content: center;
-}
-
-.scoreboard {
-  width: 50%;
 }
 
 .scoreboard--data {
