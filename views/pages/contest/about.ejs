@@ -11,19 +11,17 @@
     <section class="tutorial-section">
       <div class="problem-statement">
         <div class="problem--title">General Info</div>
-        <div class="problem--text">
-          <p>Problem input and output is done through standard IO, stdio. In other words, your program should read input from the console and output it the console. </p>
+        <div class="problem--text"><p>Problem input and output is done through standard IO, stdio. In other words, your program should read input from the console and output it the console. </p>
           <p>Input bounds are provided for every problem. Programs will be limited to 4 seconds, meaning that proper efficiency must be achieved. As a rough approximation, you should aim for under 100 million operations with the maximum input size.</p>
           <p>Problem difficulty hints are given on the top right corner, and roughly correspond to the difficulty levels in USACO. The levels are in order, bronze, silver, gold, platinum with platinum being the hardest. </p>
           <p><b>Note for python users</b>: Only Python 3 is supported. It's mostly backwards compatible so Python 2 programs <i>should</i> run properly.</p>
         </div>
         <div class="problem--title">Scoring</div>
-        <div class="problem--text">
-          <p>Correct answers are worth 50 points. There is no penalty for an incorrect submissions, but please refrain from spamming the system to try and reverse engineer test cases. Tiebreaks are done by the time of the last correct submission.</p>
+        <div class="problem--text"><p>Correct answers are worth 50 points. There is no penalty for an incorrect submissions, but please refrain from spamming the system to try and reverse engineer test cases. Tiebreaks are done by the time of the last correct submission.</p>
         </div>
       </div>
     </section>
-    <section class="tutorial-section">
+    <section class="tutorial-section tutorial-section__slim">
       <div class="problem-statement">
           <div class="problem--title">Sample Problem</div>
           <div class="problem--text"><%- md.render(sampleProblem.statement) %></div>
@@ -32,11 +30,7 @@
     <section class="tutorial-section">
       <div class="problem-statement">
         <div class="problem--title">Solutions</div>
-        <div class="problem--text">
-          <p>You can find possible solutions to the sample problem below. This should illustrate how to read and write data.</p>
-          <% samples.forEach(sample => { %> 
-            <p><a href="/contest/tutorial/samples/<%= sample %>"><%= sample %></a></p>
-          <% }) %>
+        <div class="problem--text"><p>You can find possible solutions to the sample problem below. This should illustrate how to read and write data.</p> <% samples.forEach(sample => { %> <p><a href="/contest/tutorial/samples/<%= sample %>"><%= sample %></a></p><% }) %>
         </div>
         </div>
     </section>
