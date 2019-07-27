@@ -13,4 +13,4 @@ const updateScoreboard = () => {
 };
 
 $(updateScoreboard);
-setInterval(updateScoreboard, 1000);
+setInterval(updateScoreboard, 5000);
