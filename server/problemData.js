@@ -65,6 +65,10 @@ const loadData = (config, dir) => {
       loadTestCases(`${problemDir}/data`);
       loadTestCases(`${problemDir}/data/generated`);
 
+      if(tests.length === 0){
+        console.error(`ERROR: 0 test cases found for ${problemDir}`);
+      }
+
       testData[problem] = tests;
     });
 
