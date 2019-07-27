@@ -2,7 +2,7 @@ const router = require("express").Router();
 const Joi = require("@hapi/joi");
 
 const { getPopups } = require(__rootdir + "/server/util");
-const { checkLogin } = require(__rootdir + "/server/db");
+const { checkLogin, getAllSolves } = require(__rootdir + "/server/db");
 
 router.get("/", (req, res) => {
   const { error, message } = getPopups(req.session);
@@ -32,7 +32,15 @@ router.post("/", (req, res) => {
 
       req.session.uid = data.id;
       req.session.username = username;
-      return res.redirect("/contest");
+
+      getAllSolves(solves => {
+        req.session.finished = solves
+          .filter(solve => solve.user_id === req.session.uid)
+          .map(solve => solve.problem)
+          .filter((v, i, arr) => i === arr.indexOf(v));
+        
+        return res.redirect("/contest");
+      });
     });
   });
 });

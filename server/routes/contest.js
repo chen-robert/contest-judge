@@ -13,7 +13,8 @@ router.get("/", (req, res) =>
   renderWithPopups(req, res, "pages/contest/index", {
     problems: loadProblems(),
     md,
-    languages
+    languages,
+    finished: req.session.finished
   })
 );
 

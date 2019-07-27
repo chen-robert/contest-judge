@@ -5,7 +5,7 @@ const config = require(__rootdir + "/config");
 
 const { testData } = require(__rootdir + "/server/problemData");
 
-const { startGrading, finishGrading, getSolves } = require(__rootdir +
+const { startGrading, finishGrading, getSolves, getAllSolves } = require(__rootdir +
   "/server/db");
 const request = require("request");
 const router = require("express").Router();
@@ -143,6 +143,7 @@ router.post(
               code = status(body, expected);
             }
 
+            req.session.finished.push(pid);
             finishGrading(req.session.uid, time, pid, code);
           }
         );
