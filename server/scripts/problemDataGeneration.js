@@ -79,6 +79,9 @@ const prepare = problemDir => {
 };
 
 const generateData = problemDir => {
+  if(!fs.existsSync(problemDir + "/data")) {
+    fs.mkdirSync(problemDir + "/data");
+  }
   if (!fs.existsSync(problemDir + "/data/generated")) {
     fs.mkdirSync(problemDir + "/data/generated");
   }
@@ -132,7 +135,25 @@ const generateData = problemDir => {
         const max = getValue(parts[1]);
 
         return randInt(min, max);
-      } else {
+      } else if(str.startsWith("[") && str.endsWith("]")){
+        str = str.substring(1, str.length - 1);
+
+        const type = str.split(":")[0];
+        const args = str.split(":")[1].split(",");
+
+        switch(type){
+          case "STR":
+            const length = getValue(args[0]);
+            let ret = "";
+            for(let i = 0; i < length; i++){
+              ret += String.fromCharCode("a".charCodeAt(0) + randInt(0, 26 - 1));
+            }
+            return ret;
+            break;
+        }
+
+
+      }else{
         if (str.includes("+")) {
           const parts = str.split(/\+/);
           return parts.map(getValue).reduce((a, b) => a + b);
