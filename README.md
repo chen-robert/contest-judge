@@ -1,13 +1,12 @@
 # contest-judge
 
-A minimalisic programming judge built on top of [camisole's judging API](https://github.com/prologin/camisole).  An express application built on a postgreSQL database, rendered with [EJS](https://ejs.co/).
+A programming judge built on top of [camisole's judging API](https://github.com/prologin/camisole). Built with the express framework on a postgreSQL database, rendered with [EJS](https://ejs.co/).
 
 ## Features
 
 - Automatic problem data generation in one command `npm run pdata:gen`
 - Admin interface for editting users / configuration
 - Easy, highly configurable problem writing
-
 
 ## Directory Structure
 
