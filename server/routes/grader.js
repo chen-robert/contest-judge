@@ -77,8 +77,8 @@ router.get("/submissions", (req, res) => {
       return data;
     });
 
-    submissionData[req.session.uid] = rows;
-    return res.send(submissionData[req.session.uid]);
+    submissions[req.session.uid] = rows;
+    return res.send(submissions[req.session.uid]);
   });
 });
 router.get("/user", (req, res) => res.send({ uid: req.session.uid }));
@@ -145,7 +145,7 @@ router.post(
               code = status(body, expected);
             }
 
-            req.session.finished.push(pid);
+            if(code === "OK") req.session.finished.push(pid);
             if(!submissions[req.session.uid]) submissions[req.session.uid] = [];
             submissions[req.session.uid].push(submissionData(req.session.uid, pid, code, time));
             finishGrading(req.session.uid, time, pid, code);

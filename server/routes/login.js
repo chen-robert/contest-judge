@@ -36,6 +36,7 @@ router.post("/", (req, res) => {
       getAllSolves(solves => {
         req.session.finished = solves
           .filter(solve => solve.user_id === req.session.uid)
+          .filter(solve => solve.status === "OK")
           .map(solve => solve.problem)
           .filter((v, i, arr) => i === arr.indexOf(v));
         
