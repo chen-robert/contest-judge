@@ -44,5 +44,29 @@ config.json | Additional configuration for the problem. Overrides values set in 
 format.txt | Optional. Specifies the format for automatic problem data generation.
 data | The directory storing problem data. Input and output files should be labeled `${num}.in` and `${num}.out` respectively, with num starting from 0 and going up (non-negative integers).
 data/generated | Auto-generated problem data.
-solution | Any solution files for the problem. 
+solution | Any solution files for the problem.
+
+## format.txt
+
+Comments begin with a `#`, and comment out everything on the line after it.
+
+Each format file is divided into two parts, seperated by a line beginning with three dashes (`---`). The first part of the file is the configuration. The configuration consists of a key-value pair on each line, separated by a colon. Below lists valid configuration values.
+
+Value | Description
+--- | ---
+count | Number of test cases to generate. Defaults to 1.
+
+The rest of the file defines the format for the test data. 
+
+### Values
+
+`{a:b}` is a value representing a random integer from a to b inclusive.
+
+`[TYPE:args...]` declares an object with type TYPE.
+
+### Statements
+
+`VAR X ${value}` declares a variable called X to some value. X can then be used later in both future variable declarations, as well as outputed.
+
+`> ${value} ${value} ${value}...` will output all of the values onto a new line.
 
