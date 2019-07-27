@@ -63,20 +63,22 @@ const status = (camisoleBody, expected) => {
   return "OK";
 };
 
+const submissions = {};
+const submissionData = (uid, problem, status, time) => {
+  return {uid, problem, status, time}
+};
 router.get("/submissions", (req, res) => {
+  if(submissions[req.session.uid]) return res.send(submissions[req.session.uid]);
+
   getSolves(req.session.uid, rows => {
     rows = rows.map(row => {
-      const data = {
-        uid: row.user_id,
-        problem: row.problem,
-        status: row.status,
-        time: row.time
-      };
+      const data = submissionData(row.user_id, row.problem, row.status, row.time);
 
       return data;
     });
 
-    return res.send(rows);
+    submissionData[req.session.uid] = rows;
+    return res.send(submissionData[req.session.uid]);
   });
 });
 router.get("/user", (req, res) => res.send({ uid: req.session.uid }));
@@ -144,6 +146,8 @@ router.post(
             }
 
             req.session.finished.push(pid);
+            if(!submissions[req.session.uid]) submissions[req.session.uid] = [];
+            submissions[req.session.uid].push(submissionData(req.session.uid, pid, code, time));
             finishGrading(req.session.uid, time, pid, code);
           }
         );
