@@ -10,9 +10,9 @@ window.MathJax = {
 
 $(() => {
   $(".problem-list--item a").click(function(e) {
-    $(".problem-statement").hide();
+    $(".problem-statement").addClass("problem-statement__hidden");
     const id = $(this).data("id");
-    $(`.problem-statement[data-id=${id}]`).show();
+    $(`.problem-statement[data-id=${id}]`).removeClass("problem-statement__hidden");
 
     $("#pid").val($(this).data("name"));
   });
@@ -22,8 +22,8 @@ $(() => {
   if (hash.length !== 0) {
     const $target = $(`.problem-statement[data-hash=${hash}]`);
     if ($target.length !== 0) {
-      $(".problem-statement").hide();
-      $target.show();
+      $(".problem-statement").addClass("problem-statement__hidden");
+      $target.removeClass("problem-statement__hidden");
 
       $("#pid").val($target.data("name"));
     }
