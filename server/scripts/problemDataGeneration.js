@@ -149,10 +149,37 @@ const generateData = problemDir => {
               ret += String.fromCharCode("a".charCodeAt(0) + randInt(0, 26 - 1));
             }
             return ret;
-            break;
+          case "TREE":
+            const tree = [];
+            const nodes = getValue(args[0]);
+
+            if(nodes <= 1){
+              console.error(`Invalid tree length ${nodes}. Must be >= 2`);
+              throw "";
+            }
+            for(let i = 1; i < nodes; i++){
+              tree.push(`${i} ${randInt(0, i - 1)}`);
+            }
+            return tree;
+          case "PROP":
+            const obj = getValue(args[0]);
+            const index = getValue(args[1]);
+
+            if(obj instanceof Array && typeof index === "number"){
+              return obj[index];
+            }else{
+              if(!(obj instanceof Array)) {
+                console.error(`Invalid object when indexing: ${obj}`);
+              }
+              if(!(typeof index === "number")) {
+                console.error(`Invalid index when indexing: ${index}`);
+              }
+              throw "";
+            }
+          default:
+            console.error(`Invalid object type: ${type}`);
+            throw "";
         }
-
-
       }else{
         if (str.includes("+")) {
           const parts = str.split(/\+/);
@@ -198,6 +225,7 @@ const generateData = problemDir => {
               .slice(1)
               .filter(str => str !== "")
               .map(getValue)
+              .map(data => data instanceof Array? data.join("\n"): data)
               .join(" ") + "\n"
           );
         case "end":
