@@ -45,6 +45,13 @@ const updateSubmissions = () => {
         .map(sub => submission(sub))
         .join("\n")
     );
+
+    subs
+      .filter(sub => sub.status === "OK")
+      .map(sub => sub.problem)
+      .filter((v, i, arr) => arr.indexOf(v) === i)
+      .forEach(name => $(`.problem-list--link[data-name="${name}"]`).addClass("problem-list--link__done"));
+    
   });
 };
 

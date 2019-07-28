@@ -16,7 +16,7 @@
       <div id="problem-list" class="problem-list">
         <% problems.forEach((problem, i) => { %>
           <div class="problem-list--item">
-            <a class="problem-list--link <%= finished.includes(problem.name) ? 'problem-list--link__done': '' %>" href="#<%= formatHash(problem.name) %>" data-id="<%= i %>" data-name="<%= problem.name %>"><%= problem.name %></a>
+            <a class="problem-list--link" href="#<%= formatHash(problem.name) %>" data-id="<%= i %>" data-name="<%= problem.name %>"><%= problem.name %></a>
           </div>
         <% }) %>
       </div>
