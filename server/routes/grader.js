@@ -145,7 +145,7 @@ router.post(
               code = status(body, expected);
             }
 
-            if(code === "OK") req.session.finished.push(pid);
+            if(code === "OK" && req.session.finished instanceof Array) req.session.finished.push(pid);
             if(!submissions[req.session.uid]) submissions[req.session.uid] = [];
             submissions[req.session.uid].push(submissionData(req.session.uid, pid, code, time));
             finishGrading(req.session.uid, time, pid, code);

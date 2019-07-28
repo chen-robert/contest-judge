@@ -32,16 +32,8 @@ router.post("/", (req, res) => {
 
       req.session.uid = data.id;
       req.session.username = username;
-
-      getAllSolves(solves => {
-        req.session.finished = solves
-          .filter(solve => solve.user_id === req.session.uid)
-          .filter(solve => solve.status === "OK")
-          .map(solve => solve.problem)
-          .filter((v, i, arr) => i === arr.indexOf(v));
-        
-        return res.redirect("/contest");
-      });
+      
+      return res.redirect("/contest");
     });
   });
 });

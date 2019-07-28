@@ -9,12 +9,26 @@ const md = new require("markdown-it")();
 
 const router = require("express").Router();
 
-router.get("/", (req, res) =>
+router.get("/", 
+  (req, res, next) => {
+    if(req.session.finished) return next();
+    
+    getAllSolves(solves => {
+      req.session.finished = solves
+        .filter(solve => solve.user_id === req.session.uid)
+        .filter(solve => solve.status === "OK")
+        .map(solve => solve.problem)
+        .filter((v, i, arr) => i === arr.indexOf(v));
+      
+      next();
+    });
+  },
+  (req, res) =>
   renderWithPopups(req, res, "pages/contest/index", {
     problems: loadProblems(),
     md,
     languages,
-    finished: req.session.finished
+    finished: req.session.finished || []
   })
 );
 
