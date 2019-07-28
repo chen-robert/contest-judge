@@ -143,24 +143,41 @@ const generateData = problemDir => {
 
         switch(type){
           case "STR":
-            const length = getValue(args[0]);
-            let ret = "";
-            for(let i = 0; i < length; i++){
-              ret += String.fromCharCode("a".charCodeAt(0) + randInt(0, 26 - 1));
+            {
+              const length = getValue(args[0]);
+              let ret = "";
+              for(let i = 0; i < length; i++){
+                ret += String.fromCharCode("a".charCodeAt(0) + randInt(0, 26 - 1));
+              }
+              return ret;
             }
-            return ret;
           case "TREE":
-            const tree = [];
-            const nodes = getValue(args[0]);
+            {
+              const tree = [];
+              const nodes = getValue(args[0]);
 
-            if(nodes <= 1){
-              console.error(`Invalid tree length ${nodes}. Must be >= 2`);
-              throw "";
+              if(nodes <= 1){
+                console.error(`Invalid tree length ${nodes}. Must be >= 2`);
+                throw "";
+              }
+              for(let i = 1; i < nodes; i++){
+                tree.push(`${i} ${randInt(0, i - 1)}`);
+              }
+              return tree;
             }
-            for(let i = 1; i < nodes; i++){
-              tree.push(`${i} ${randInt(0, i - 1)}`);
+          case "ARR":
+            {
+              const array = [];
+              const length = getValue(args[0]);
+              const min = getValue(args[1]);
+              const max = getValue(args[2]);
+
+              for(let i = 0; i < length; i++){
+                array.push(randInt(min, max));
+              }
+
+              return array.join(" ");
             }
-            return tree;
           case "PROP":
             const obj = getValue(args[0]);
             const index = getValue(args[1]);
