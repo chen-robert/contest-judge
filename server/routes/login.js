@@ -2,7 +2,7 @@ const router = require("express").Router();
 const Joi = require("@hapi/joi");
 
 const { getPopups } = require(__rootdir + "/server/util");
-const { checkLogin, getAllSolves } = require(__rootdir + "/server/db");
+const { checkLogin } = require(__rootdir + "/server/db");
 
 router.get("/", (req, res) => {
   const { error, message } = getPopups(req.session);
