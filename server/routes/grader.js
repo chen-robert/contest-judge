@@ -29,8 +29,8 @@ const compileLimits = {
 };
 
 const execLimits = {
-  time: 10,
-  "wall-time": 10,
+  time: 4,
+  "wall-time": 20,
   processes: 100,
   mem: 100 * 1000 * 1000
 };
@@ -141,6 +141,7 @@ router.post(
             let code;
             if (err) {
               code = "ENDPOINT_ERROR";
+              console.log(err);
             } else {
               code = status(body, expected);
             }
