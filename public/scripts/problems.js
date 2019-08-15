@@ -28,6 +28,11 @@ $(() => {
       $("#pid").val($target.data("name"));
     }
   }
+
+  if(localStorage.getItem("lang")) $(`select[name="lang"]`).val(localStorage.getItem("lang"))
+  $(`select[name="lang"]`).change(e => {
+    localStorage.setItem("lang", e.target.value);
+  });
 });
 
 const submission = ({ problem, status }) => `
