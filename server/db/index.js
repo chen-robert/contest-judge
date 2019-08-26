@@ -9,6 +9,7 @@ const handleError = (err, callback) => {
   console.error(err);
   callback(err);
 };
+
 module.exports = {
   addUser: (name, email, password, division, callback) => {
     client

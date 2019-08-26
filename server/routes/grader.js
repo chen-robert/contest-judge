@@ -5,8 +5,7 @@ const config = require(__rootdir + "/config");
 
 const { testData } = require(__rootdir + "/server/problemData");
 
-const { startGrading, finishGrading, getSolves, getAllSolves } = require(__rootdir +
-  "/server/db");
+const { startGrading, finishGrading, getSolves } = require(__rootdir + "/server/db");
 const request = require("request");
 const router = require("express").Router();
 
@@ -17,44 +16,34 @@ const upload = require("multer")({
   }
 });
 
-const api = process.env.CAMISOLE;
+const api = process.env.CIRRUS_ENDPOINT;
 console.log(
   api === undefined
-    ? "WARNING: Camisole endpoint undefined (process.env.CAMISOLE)"
+    ? "WARNING: Cirrus endpoint undefined (process.env.CIRRUS_ENDPOINT)"
     : `Using camsiole endpoint at ${api}`
 );
 
 const compileLimits = {
-  "wall-time": 10
+  "wallTime": 10
 };
 
 const execLimits = {
   time: 4,
-  "wall-time": 20,
-  processes: 100,
+  wallTime: 20,
   mem: 100 * 1000 * 1000
 };
 
-const compare = (a, b) => {
-  return clean(a) === clean(b);
-};
-const clean = a => a.trim().replace(/\r/g, "");
-
-const status = (camisoleBody, expected) => {
-  if (camisoleBody.compile) {
-    if (camisoleBody.compile.exitcode !== 0) {
+const status = (body) => {
+  if (body.compile) {
+    if (body.compile.err) {
       return "COMPILE_ERROR";
     }
   }
 
-  if (!camisoleBody.success) {
-    return "GRADER_ERROR";
-  }
-  if (camisoleBody.tests) {
-    for (let i = 0; i < camisoleBody.tests.length; i++) {
-      const currTest = camisoleBody.tests[i];
-      if (currTest.meta.status !== "OK") return currTest.meta.status;
-      if (!compare(currTest.stdout, expected[currTest.name])) return "WA";
+  if (body.tests) {
+    for (let i = 0; i < body.tests.length; i++) {
+      const currTest = body.tests[i];
+      if (currTest.status !== "AC") return currTest.status;
     }
   } else {
     return "UNKNOWN_ERROR";
@@ -107,7 +96,7 @@ router.post(
       if (err) {
         return res.status(400).send("Invalid parameters");
       }
-      const { pid, lang } = req.body;
+      const { pid, lang } = val;
 
       const tests = testData[pid];
 
@@ -117,12 +106,12 @@ router.post(
         req.session.error = "Testcases not available. Please contact an admin.";
       } else {
         const data = fs.readFileSync(req.file.path, "utf8");
-        const expected = {};
-        for (let i = 0; i < tests.length; i++) {
-          expected[tests[i].name] = tests[i].stdout;
-        }
 
         const time = startGrading(req.session.uid, pid);
+        
+        if(!submissions[req.session.uid]) submissions[req.session.uid] = [];
+        const oldIndex = submissions[req.session.uid].length;
+        submissions[req.session.uid].push(submissionData(req.session.uid, pid, "GRADING", time));
 
         request(
           {
@@ -130,9 +119,11 @@ router.post(
             body: {
               lang: lang,
               source: data,
-              compile: compileLimits,
-              execute: execLimits,
-              tests
+              filename: req.file.originalname,
+              compileOpts: compileLimits,
+              executeOpts: execLimits,
+              grader: "default",
+              testsuite: tests
             },
             json: true,
             url: `${api}/run`
@@ -143,11 +134,10 @@ router.post(
               code = "ENDPOINT_ERROR";
               console.log(err);
             } else {
-              code = status(body, expected);
+              code = status(body);
             }
 
-            if(!submissions[req.session.uid]) submissions[req.session.uid] = [];
-            submissions[req.session.uid].push(submissionData(req.session.uid, pid, code, time));
+            submissions[req.session.uid][oldIndex] = submissionData(req.session.uid, pid, code, time);
             finishGrading(req.session.uid, time, pid, code);
           }
         );

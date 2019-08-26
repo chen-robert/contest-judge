@@ -1,5 +1,8 @@
 const fs = require("fs");
 const config = require(__rootdir + "/config");
+const request = require("request");
+
+const cirrusEndpoint = process.env.CIRRUS_ENDPOINT;
 
 const loadProblems = dir => {
   const config = require(dir + "/config.json");
@@ -12,65 +15,94 @@ const loadProblems = dir => {
   };
 };
 
+const normalizeName = name => {
+  const norm = name.replace(/ /g, "_").replace(/\W/g, "").toLowerCase();
+  return norm.substring(Math.max(0, norm.length - 30), norm.length);
+}
+
 const loadData = (config, dir) => {
   const problemData = [];
   const testData = {};
 
   const defaultConf = config.default;
 
-  const problemDirs = config.problems || fs.readdirSync(dir);
   const excludedDirs = config.excluded || [];
+  const problemDirs = (config.problems || fs.readdirSync(dir))
+    .filter(problem => !excludedDirs.includes(problem));
 
-  problemDirs
-    .filter(problem => !excludedDirs.includes(problem))
-    .forEach(problem => {
-      const problemDir = dir + "/" + problem;
+    
+  for (const problem of problemDirs) {
+    const problemDir = dir + "/" + problem;
 
-      if (!fs.lstatSync(problemDir).isDirectory()) {
-        return;
+    if (!fs.lstatSync(problemDir).isDirectory()) {
+      return;
+    }
+
+    // Load problemData
+    const statement = fs.readFileSync(problemDir + "/statement.txt", "utf8");
+    const config = Object.assign(
+      {},
+      defaultConf,
+      fs.existsSync(problemDir + "/config.json")
+        ? require(problemDir + "/config.json")
+        : {}
+    );
+    const currProblemData = {
+      name: problem,
+      statement,
+      config
+    };
+    problemData.push(currProblemData);
+
+    // Load test cases
+    const tests = [];
+
+    const loadTestCases = dataBase => {
+      let i = 0;
+      while (fs.existsSync(`${dataBase}/${i}.in`)) {
+        tests.push({
+          name: `test_${tests.length}`,
+          stdin: `${dataBase}/${i}.in`,
+          stdout: `${dataBase}/${i}.out`
+        });
+        i++;
       }
+    };
 
-      // Load problemData
-      const statement = fs.readFileSync(problemDir + "/statement.txt", "utf8");
-      const config = Object.assign(
-        {},
-        defaultConf,
-        fs.existsSync(problemDir + "/config.json")
-          ? require(problemDir + "/config.json")
-          : {}
-      );
-      const currProblemData = {
-        name: problem,
-        statement,
-        config
-      };
-      problemData.push(currProblemData);
+    loadTestCases(`${problemDir}/data`);
+    loadTestCases(`${problemDir}/data/generated`);
 
-      // Load test cases
-      const tests = [];
-
-      const loadTestCases = dataBase => {
-        let i = 0;
-        while (fs.existsSync(`${dataBase}/${i}.in`)) {
-          tests.push({
-            name: `test_${tests.length}`,
-            stdin: fs.readFileSync(`${dataBase}/${i}.in`).toString(),
-            stdout: fs.readFileSync(`${dataBase}/${i}.out`).toString()
+    if(tests.length === 0){
+      console.error(`ERROR: 0 test cases found for ${problemDir}`);
+    } else {
+      const upload = (name, testsuite, path) => {
+        return new Promise((resolve, reject) => {
+          request.post({
+            url: `${cirrusEndpoint}/upload`,
+            formData: {
+              name,
+              testsuite,
+              file: fs.createReadStream(path)
+            }
+          }, (err, resp) => {
+            if(err) return reject(err);
+            if(resp.statusCode === 200) return resolve();
+            return reject({err: "404"});
           });
-
-          i++;
-        }
-      };
-
-      loadTestCases(`${problemDir}/data`);
-      loadTestCases(`${problemDir}/data/generated`);
-
-      if(tests.length === 0){
-        console.error(`ERROR: 0 test cases found for ${problemDir}`);
+        });
       }
 
-      testData[problem] = tests;
-    });
+      (async function() {
+        for(const test of tests) {
+          const testsuite = normalizeName(problem);
+          await upload(test.name + ".in", testsuite, test.stdin);
+          await upload(test.name + ".out", testsuite, test.stdout);
+        };
+      })();
+    }
+
+    testData[problem] = normalizeName(problem);
+  };
 
   return { testData, problemData };
 };
@@ -91,6 +123,5 @@ const combine = problems => {
   return { problemData, testData };
 };
 
-module.exports = combine(
-  config.problemDirs.map(dir => loadProblems(__rootdir + dir))
-);
+const values = config.problemDirs.map(dir => loadProblems(__rootdir + dir));
+module.exports = combine(values);
