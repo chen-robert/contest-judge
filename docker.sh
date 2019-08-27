@@ -1,9 +1,9 @@
 #!/bin/sh
-while ! curl $CIRRUS_ENDPOINT
+while ! curl -s $CIRRUS_ENDPOINT > /dev/null
 do
-  echo "$(date) - still trying"
+  echo "$(date) - waiting for cirrus endpoint at $CIRRUS_ENDPOINT"
   sleep 1
 done
-echo "$(date) - connected successfully"
+echo "$(date) - connected to cirrus"
 
 node index.js
