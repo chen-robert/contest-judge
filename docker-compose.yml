@@ -1,0 +1,22 @@
+version: "3"
+services:
+  contest-judge:
+    build: .
+    ports: 
+      - 8101:8000
+    environment: 
+      - CIRRUS_ENDPOINT=http://cirrus:8000
+      - PORT=8000
+      - DATABASE_URL=postgresql://robert:tensorflow@contest.cbsmey8b4d5g.us-west-2.rds.amazonaws.com:5432/judge
+    expose: 
+      - 8000
+    restart: always
+    depends_on:
+      - cirrus
+  cirrus:
+    build: 
+      context: https://github.com/chen-robert/cirrus.git
+    environment: 
+      - PORT=8000
+    privileged: true
+    restart: always
