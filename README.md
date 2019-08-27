@@ -1,12 +1,23 @@
 # contest-judge
 
-A programming judge built on top of [camisole's judging API](https://github.com/prologin/camisole). Built with the express framework on a postgreSQL database, rendered with [EJS](https://ejs.co/).
+A programming judge built on top of [the cirrus judging API](https://github.com/chen-robert/cirrus). Built with the express framework on a postgreSQL database, rendered with [EJS](https://ejs.co/).
+
+## Deployment
+
+```bash
+$ git clone https://github.com/chen-robert/contest-judge.git
+$ cd contest-judge
+$ docker-compose up
+```
+
+By default, the server runs on port 5000. You can change this up editting the `.env` file. You'll also want to set a new secret for the SECRET_KEY value, which will be used to sign cookies. 
 
 ## Features
 
 - Automatic problem data generation in one command `npm run pdata:gen`
 - Admin interface for editting users / configuration
 - Easy, highly configurable problem writing
+- Simple, one command deployment with docker
 
 ## Directory Structure
 
@@ -15,13 +26,6 @@ Static files can be found in `/public`. Scripts are located in `/public/scripts`
 Styles are written with [less](http://lesscss.org/) and compiled with [express middleware](https://github.com/emberfeather/less.js-middleware) at runtime.
 Serverside scripts are located in `/server`, with the main file at `/index.js`.
 The configuration file can be located at `/config.json`.
-
-## Running
-
-```bash
-$ npm install
-$ PORT=1234 npm start
-```
 
 ## Development
 
