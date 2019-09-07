@@ -7,11 +7,14 @@ services:
     environment: 
       - CIRRUS_ENDPOINT=http://cirrus:8000
       - PORT=8000
+      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD}@db:5432/contest
+      - SECRET=${SECRET}
     expose: 
       - 8000
     restart: always
     depends_on:
       - cirrus
+      - db
   cirrus:
     build: 
       context: https://github.com/chen-robert/cirrus.git
@@ -19,3 +22,11 @@ services:
       - PORT=8000
     privileged: true
     restart: always
+  db:
+    build: ./postgres 
+    environment: 
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes: 
+      - db_data:/var/lib/postgresql/data
+volumes:
+  db_data:
