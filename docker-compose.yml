@@ -7,7 +7,6 @@ services:
     environment: 
       - CIRRUS_ENDPOINT=http://cirrus:8000
       - PORT=8000
-      - DATABASE_URL=postgresql://robert:tensorflow@contest.cbsmey8b4d5g.us-west-2.rds.amazonaws.com:5432/judge
     expose: 
       - 8000
     restart: always
