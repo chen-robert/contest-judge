@@ -16,3 +16,4 @@ problems/*
 # Used in problem generation
 **/generated
 *.class
+*.swp
