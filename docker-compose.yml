@@ -3,7 +3,7 @@ services:
   contest-judge:
     build: .
     ports: 
-      - 8101:8000
+      - ${PORT}:8000
     environment: 
       - CIRRUS_ENDPOINT=http://cirrus:8000
       - PORT=8000
