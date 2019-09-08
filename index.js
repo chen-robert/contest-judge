@@ -57,4 +57,10 @@ app.use("/grader", require(__rootdir + "/server/routes/grader"));
 app.use(enforceAdmin);
 app.use("/admin", require(__rootdir + "/server/routes/admin.js"));
 
+
+const {addUser} = require(__rootdir + "/server/db");
+addUser("admin", "admin", process.env.ADMIN_PASSWORD || "ihsprogramming", "advanced", (err) => {
+  if(!err) console.log("Created new admin user");
+});
+
 app.listen(PORT, () => console.log(`Started server at port ${PORT}`));

@@ -9,6 +9,7 @@ services:
       - PORT=8000
       - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD}@db:5432/contest
       - SECRET=${SECRET}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
     expose: 
       - 8000
     restart: always
