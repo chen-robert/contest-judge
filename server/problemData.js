@@ -33,6 +33,7 @@ const loadData = (config, dir) => {
     
   for (const problem of problemDirs) {
     const problemDir = dir + "/" + problem;
+    const testsuite = normalizeName(problem);
 
     if (!fs.lstatSync(problemDir).isDirectory()) {
       return;
@@ -55,51 +56,72 @@ const loadData = (config, dir) => {
     problemData.push(currProblemData);
 
     // Load test cases
-    const tests = [];
+    let tests = [];
 
     const loadTestCases = dataBase => {
       let i = 0;
       while (fs.existsSync(`${dataBase}/${i}.in`)) {
         tests.push({
           name: `test_${tests.length}`,
+          testsuite,
           stdin: `${dataBase}/${i}.in`,
           stdout: `${dataBase}/${i}.out`
         });
         i++;
       }
     };
+    
+    const upload = (name, testsuite, path) => {
+      return new Promise((resolve, reject) => {
+        request.post({
+          url: `${cirrusEndpoint}/upload`,
+          formData: {
+            name,
+            testsuite,
+            file: fs.createReadStream(path)
+          }
+        }, (err, resp) => {
+          if(err) return reject(err);
+          if(resp.statusCode === 200) return resolve();
+          return reject({err: "404"});
+        });
+      });
+    }
+
 
     loadTestCases(`${problemDir}/data`);
     loadTestCases(`${problemDir}/data/generated`);
 
     if(tests.length === 0){
-      console.error(`ERROR: 0 test cases found for ${problemDir}`);
-    } else {
-      const upload = (name, testsuite, path) => {
-        return new Promise((resolve, reject) => {
-          request.post({
-            url: `${cirrusEndpoint}/upload`,
-            formData: {
-              name,
-              testsuite,
-              file: fs.createReadStream(path)
-            }
-          }, (err, resp) => {
-            if(err) return reject(err);
-            if(resp.statusCode === 200) return resolve();
-            return reject({err: "404"});
-          });
+      console.log(`0 test cases found for ${problemDir}. Attempting to load subtests`);
+      
+      tests = tests.splice(0, tests.length);
+
+      const subtests = fs.readdirSync(`${problemDir}/data`)
+        .filter(name => name !== "generated");
+      
+      let ret = [];
+      for(const subtest of subtests) {
+        loadTestCases(`${problemDir}/data/${subtest}`);
+
+        const currTests = tests.splice(0, tests.length);
+        currTests.forEach(test => {
+          test.testsuite = testsuite + config.subtestSep + subtest;
+          ret.push(test);
         });
       }
+      tests = ret;
+    } 
 
-      (async function() {
-        for(const test of tests) {
-          const testsuite = normalizeName(problem);
-          await upload(test.name + ".in", testsuite, test.stdin);
-          await upload(test.name + ".out", testsuite, test.stdout);
-        };
-      })();
-    }
+    if(tests.length === 0) console.error(`ERROR: 0 test cases found for ${problemDir}`);
+    
+    (async function() {
+      for(const test of tests) {
+        await upload(test.name + ".in", test.testsuite, test.stdin);
+        await upload(test.name + ".out", test.testsuite, test.stdout);
+      };
+    })();
+    
 
     testData[problem] = normalizeName(problem);
   };
