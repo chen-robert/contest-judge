@@ -23,9 +23,12 @@ router.get("/scoreboard", (req, res) =>
   renderWithPopups(req, res, "pages/contest/scoreboard")
 );
 
-const samples = fs.readdirSync(
-  __rootdir + "/problems/sample/Hello Woooorld/solution"
-).filter(name => !name.endsWith(".class"));
+const sampleDir = __rootdir + "/problems/sample/Hello Woooorld/solution";
+router.use("/about/samples", require("express").static(sampleDir));
+
+const samples = fs.readdirSync(sampleDir)
+  .filter(name => !name.endsWith(".class"));
+
 router.get("/about", (req, res) =>
   renderWithPopups(req, res, "pages/contest/about", {
     samples,
