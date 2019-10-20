@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <% include ../../partials/header %>
+    <% include ../../partials/admin-navbar %>
     <link rel="stylesheet" type="text/css" href="/styles/admin.css">
     <script src="/scripts/admin/users.js"></script>
   </head>
@@ -19,7 +20,7 @@
         <button class="form--button" type="submit">Submit</button>
       </form>
     </div>
-    <table class="submissions">
+    <table class="table">
       <thead>
         <tr>
           <th>Username</th>
@@ -27,20 +28,11 @@
           <th></th>
         </tr>
       </thead>
-      <tbody id="users">
+      <tbody id="users" style="text-align: center">
         <% users.forEach(user => { %>
         <tr class="submissions--row">
-          <td><input class="submissions--input" value="<%= user.username %>" /></td>
-          <td>
-            <select class="submissions--input" class="form--input" name="division">
-              <option ${
-                user.division === "beginner" ? "selected" : ""
-              } value="beginner">Beginner</option>
-              <option ${
-                user.division === "advanced" ? "selected" : ""
-              } value="advanced">Advanced</option>
-            </select>
-          </td>
+          <td><%= user.username %></td>
+          <td><%= user.division %></td>
           <td class="submissions--delete" data-username="<%= user.username %>">X</td>
         </tr>
         <% }) %>
