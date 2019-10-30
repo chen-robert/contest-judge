@@ -36,7 +36,8 @@ app.use(
   })
 );
 
-app.get("/", (req, res) => res.redirect("/contest"));
+app.get("/", (req, res) => res.render("pages/index"));
+
 // Public routes
 app.use("/login", require(__rootdir + "/server/routes/login.js"));
 app.get("/logout", (req, res) => {

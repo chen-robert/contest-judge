@@ -73,6 +73,9 @@ const loadData = (config, dir) => {
     
     const upload = (name, testsuite, path) => {
       return new Promise((resolve, reject) => {
+        // If endpoint not specified, don't try uploading
+        if(!cirrusEndpoint) return resolve();
+
         request.post({
           url: `${cirrusEndpoint}/upload`,
           formData: {

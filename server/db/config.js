@@ -9,7 +9,7 @@ if (process.env.DATABASE_URL) {
 } else if (host && db && username && password) {
   dbUrl = `postgresql://${username}:${password}@${host}:5432/${db}`;
 } else {
-  dbUrl = "postgresql://postgres:nike@localhost:5432/judge";
+  dbUrl = "postgresql://postgres:nike@localhost:5432/contest";
 }
 if (!dbUrl) throw new Error("Missing environmental variable DATABASE_URL");
 
