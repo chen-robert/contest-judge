@@ -1,6 +1,5 @@
 const loadProblems = require(__rootdir + "/server/problems");
 const { renderWithPopups } = require(__rootdir + "/server/util");
-const { getAllSolves } = require(__rootdir + "/server/db");
 
 const fs = require("fs");
 
@@ -14,6 +13,7 @@ router.get("/",
   (req, res) =>
   renderWithPopups(req, res, "pages/contest/index", {
     problems: loadProblems(),
+    name: req.session.username,
     md,
     languages
   })

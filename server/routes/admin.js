@@ -1,6 +1,3 @@
-const { getUserData } = require(__rootdir + "/server/db");
-const config = require(__rootdir + "/config");
-
 const router = require("express").Router();
 
 router.get("/", (req, res) => res.render("pages/admin/index"));
