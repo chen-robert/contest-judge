@@ -6,6 +6,11 @@
     "/problems/ipc-problems"
   ],
   "languages": [
-    "java", "javascript", "c", "c++", "c#", "python"
+    "java",
+    "javascript",
+    "c",
+    "c++",
+    "c#",
+    "python"
   ]
 }
