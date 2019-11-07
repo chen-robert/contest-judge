@@ -20,7 +20,9 @@ router.get("/",
 );
 
 router.get("/scoreboard", (req, res) =>
-  renderWithPopups(req, res, "pages/contest/scoreboard")
+  renderWithPopups(req, res, "pages/contest/scoreboard", {
+    name: req.session.username
+  })
 );
 
 const sampleDir = __rootdir + "/problems/sample/Hello Woooorld/solution";
@@ -35,6 +37,7 @@ router.get("/about", (req, res) =>
     sampleProblem: loadProblems().filter(
       problem => problem.name === "Hello Woooorld"
     )[0],
+    name: req.session.username,
     md
   })
 );
