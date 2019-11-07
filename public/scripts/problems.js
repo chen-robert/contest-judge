@@ -12,7 +12,9 @@ $(() => {
   $(".problem-list--item a").click(function(e) {
     $(".problem-statement").addClass("problem-statement__hidden");
     const id = $(this).data("id");
-    $(`.problem-statement[data-id=${id}]`).removeClass("problem-statement__hidden");
+    $(`.problem-statement[data-id=${id}]`).removeClass(
+      "problem-statement__hidden"
+    );
 
     $("#pid").val($(this).data("name"));
   });
@@ -29,7 +31,8 @@ $(() => {
     }
   }
 
-  if(localStorage.getItem("lang")) $(`select[name="lang"]`).val(localStorage.getItem("lang"))
+  if (localStorage.getItem("lang"))
+    $(`select[name="lang"]`).val(localStorage.getItem("lang"));
   $(`select[name="lang"]`).change(e => {
     localStorage.setItem("lang", e.target.value);
   });
@@ -55,8 +58,11 @@ const updateSubmissions = () => {
       .filter(sub => sub.status === "OK")
       .map(sub => sub.problem)
       .filter((v, i, arr) => arr.indexOf(v) === i)
-      .forEach(name => $(`.problem-list--link[data-name="${name}"]`).addClass("problem-list--link__done"));
-    
+      .forEach(name =>
+        $(`.problem-list--link[data-name="${name}"]`).addClass(
+          "problem-list--link__done"
+        )
+      );
   });
 };
 

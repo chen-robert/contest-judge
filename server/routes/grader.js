@@ -5,7 +5,8 @@ const config = require(__rootdir + "/config");
 
 const { testData } = require(__rootdir + "/server/problemData");
 
-const { startGrading, finishGrading, getSolves } = require(__rootdir + "/server/db");
+const { startGrading, finishGrading, getSolves } = require(__rootdir +
+  "/server/db");
 const request = require("request");
 const router = require("express").Router();
 
@@ -24,7 +25,7 @@ console.log(
 );
 
 const compileLimits = {
-  "wallTime": 10
+  wallTime: 10
 };
 
 const execLimits = {
@@ -33,7 +34,7 @@ const execLimits = {
   mem: 100 * 1000 * 1000
 };
 
-const status = (body) => {
+const status = body => {
   if (body.compile) {
     if (body.compile.err) {
       return "COMPILE_ERROR";
@@ -54,14 +55,20 @@ const status = (body) => {
 
 const submissions = {};
 const submissionData = (uid, problem, status, time) => {
-  return {uid, problem, status, time}
+  return { uid, problem, status, time };
 };
 router.get("/submissions", (req, res) => {
-  if(submissions[req.session.uid]) return res.send(submissions[req.session.uid]);
+  if (submissions[req.session.uid])
+    return res.send(submissions[req.session.uid]);
 
   getSolves(req.session.uid, rows => {
     rows = rows.map(row => {
-      const data = submissionData(row.user_id, row.problem, row.status, row.time);
+      const data = submissionData(
+        row.user_id,
+        row.problem,
+        row.status,
+        row.time
+      );
 
       return data;
     });
@@ -108,10 +115,12 @@ router.post(
         const data = fs.readFileSync(req.file.path, "utf8");
 
         const time = startGrading(req.session.uid, pid);
-        
-        if(!submissions[req.session.uid]) submissions[req.session.uid] = [];
+
+        if (!submissions[req.session.uid]) submissions[req.session.uid] = [];
         const oldIndex = submissions[req.session.uid].length;
-        submissions[req.session.uid].push(submissionData(req.session.uid, pid, "GRADING", time));
+        submissions[req.session.uid].push(
+          submissionData(req.session.uid, pid, "GRADING", time)
+        );
 
         request(
           {
@@ -137,7 +146,12 @@ router.post(
               code = status(body);
             }
 
-            submissions[req.session.uid][oldIndex] = submissionData(req.session.uid, pid, code, time);
+            submissions[req.session.uid][oldIndex] = submissionData(
+              req.session.uid,
+              pid,
+              code,
+              time
+            );
             finishGrading(req.session.uid, time, pid, code);
           }
         );

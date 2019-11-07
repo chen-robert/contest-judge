@@ -79,7 +79,7 @@ const prepare = problemDir => {
 };
 
 const generateData = problemDir => {
-  if(!fs.existsSync(problemDir + "/data")) {
+  if (!fs.existsSync(problemDir + "/data")) {
     fs.mkdirSync(problemDir + "/data");
   }
   if (!fs.existsSync(problemDir + "/data/generated")) {
@@ -135,60 +135,59 @@ const generateData = problemDir => {
         const max = getValue(parts[1]);
 
         return randInt(min, max);
-      } else if(str.startsWith("[") && str.endsWith("]")){
+      } else if (str.startsWith("[") && str.endsWith("]")) {
         str = str.substring(1, str.length - 1);
 
         const type = str.split(":")[0];
         const args = str.split(":")[1].split(",");
 
-        switch(type){
-          case "STR":
-            {
-              const length = getValue(args[0]);
-              let ret = "";
-              for(let i = 0; i < length; i++){
-                ret += String.fromCharCode("a".charCodeAt(0) + randInt(0, 26 - 1));
-              }
-              return ret;
+        switch (type) {
+          case "STR": {
+            const length = getValue(args[0]);
+            let ret = "";
+            for (let i = 0; i < length; i++) {
+              ret += String.fromCharCode(
+                "a".charCodeAt(0) + randInt(0, 26 - 1)
+              );
             }
-          case "TREE":
-            {
-              const tree = [];
-              const nodes = getValue(args[0]);
+            return ret;
+          }
+          case "TREE": {
+            const tree = [];
+            const nodes = getValue(args[0]);
 
-              if(nodes <= 1){
-                console.error(`Invalid tree length ${nodes}. Must be >= 2`);
-                throw "";
-              }
-              for(let i = 1; i < nodes; i++){
-                tree.push(`${i} ${randInt(0, i - 1)}`);
-              }
-              return tree;
+            if (nodes <= 1) {
+              console.error(`Invalid tree length ${nodes}. Must be >= 2`);
+              throw "";
             }
-          case "ARR":
-            {
-              const array = [];
-              const length = getValue(args[0]);
-              const min = getValue(args[1]);
-              const max = getValue(args[2]);
-
-              for(let i = 0; i < length; i++){
-                array.push(randInt(min, max));
-              }
-
-              return array.join(" ");
+            for (let i = 1; i < nodes; i++) {
+              tree.push(`${i} ${randInt(0, i - 1)}`);
             }
+            return tree;
+          }
+          case "ARR": {
+            const array = [];
+            const length = getValue(args[0]);
+            const min = getValue(args[1]);
+            const max = getValue(args[2]);
+
+            for (let i = 0; i < length; i++) {
+              array.push(randInt(min, max));
+            }
+
+            return array.join(" ");
+          }
           case "PROP":
             const obj = getValue(args[0]);
             const index = getValue(args[1]);
 
-            if(obj instanceof Array && typeof index === "number"){
+            if (obj instanceof Array && typeof index === "number") {
               return obj[index];
-            }else{
-              if(!(obj instanceof Array)) {
+            } else {
+              if (!(obj instanceof Array)) {
                 console.error(`Invalid object when indexing: ${obj}`);
               }
-              if(!(typeof index === "number")) {
+              if (!(typeof index === "number")) {
                 console.error(`Invalid index when indexing: ${index}`);
               }
               throw "";
@@ -197,7 +196,7 @@ const generateData = problemDir => {
             console.error(`Invalid object type: ${type}`);
             throw "";
         }
-      }else{
+      } else {
         if (str.includes("+")) {
           const parts = str.split(/\+/);
           return parts.map(getValue).reduce((a, b) => a + b);
@@ -242,7 +241,7 @@ const generateData = problemDir => {
               .slice(1)
               .filter(str => str !== "")
               .map(getValue)
-              .map(data => data instanceof Array? data.join("\n"): data)
+              .map(data => (data instanceof Array ? data.join("\n") : data))
               .join(" ") + "\n"
           );
         case "end":

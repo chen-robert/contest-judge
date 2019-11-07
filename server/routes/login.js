@@ -32,7 +32,7 @@ router.post("/", (req, res) => {
 
       req.session.uid = data.id;
       req.session.username = username;
-      
+
       return res.redirect("/contest");
     });
   });

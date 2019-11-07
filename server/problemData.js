@@ -16,9 +16,12 @@ const loadProblems = dir => {
 };
 
 const normalizeName = name => {
-  const norm = name.replace(/ /g, "_").replace(/\W/g, "").toLowerCase();
+  const norm = name
+    .replace(/ /g, "_")
+    .replace(/\W/g, "")
+    .toLowerCase();
   return norm.substring(Math.max(0, norm.length - 30), norm.length);
-}
+};
 
 const loadData = (config, dir) => {
   const problemData = [];
@@ -27,10 +30,10 @@ const loadData = (config, dir) => {
   const defaultConf = config.default;
 
   const excludedDirs = config.excluded || [];
-  const problemDirs = (config.problems || fs.readdirSync(dir))
-    .filter(problem => !excludedDirs.includes(problem));
+  const problemDirs = (config.problems || fs.readdirSync(dir)).filter(
+    problem => !excludedDirs.includes(problem)
+  );
 
-    
   for (const problem of problemDirs) {
     const problemDir = dir + "/" + problem;
     const testsuite = normalizeName(problem);
@@ -70,41 +73,46 @@ const loadData = (config, dir) => {
         i++;
       }
     };
-    
+
     const upload = (name, testsuite, path) => {
       return new Promise((resolve, reject) => {
         // If endpoint not specified, don't try uploading
-        if(!cirrusEndpoint) return resolve();
+        if (!cirrusEndpoint) return resolve();
 
-        request.post({
-          url: `${cirrusEndpoint}/upload`,
-          formData: {
-            name,
-            testsuite,
-            file: fs.createReadStream(path)
+        request.post(
+          {
+            url: `${cirrusEndpoint}/upload`,
+            formData: {
+              name,
+              testsuite,
+              file: fs.createReadStream(path)
+            }
+          },
+          (err, resp) => {
+            if (err) return reject(err);
+            if (resp.statusCode === 200) return resolve();
+            return reject({ err: "404" });
           }
-        }, (err, resp) => {
-          if(err) return reject(err);
-          if(resp.statusCode === 200) return resolve();
-          return reject({err: "404"});
-        });
+        );
       });
-    }
-
+    };
 
     loadTestCases(`${problemDir}/data`);
     loadTestCases(`${problemDir}/data/generated`);
 
-    if(tests.length === 0){
-      console.log(`0 test cases found for ${problemDir}. Attempting to load subtests`);
-      
+    if (tests.length === 0) {
+      console.log(
+        `0 test cases found for ${problemDir}. Attempting to load subtests`
+      );
+
       tests = tests.splice(0, tests.length);
 
-      const subtests = fs.readdirSync(`${problemDir}/data`)
+      const subtests = fs
+        .readdirSync(`${problemDir}/data`)
         .filter(name => name !== "generated");
-      
+
       let ret = [];
-      for(const subtest of subtests) {
+      for (const subtest of subtests) {
         loadTestCases(`${problemDir}/data/${subtest}`);
 
         const currTests = tests.splice(0, tests.length);
@@ -114,20 +122,20 @@ const loadData = (config, dir) => {
         });
       }
       tests = ret;
-    } 
+    }
 
-    if(tests.length === 0) console.error(`ERROR: 0 test cases found for ${problemDir}`);
-    
+    if (tests.length === 0)
+      console.error(`ERROR: 0 test cases found for ${problemDir}`);
+
     (async function() {
-      for(const test of tests) {
+      for (const test of tests) {
         await upload(test.name + ".in", test.testsuite, test.stdin);
         await upload(test.name + ".out", test.testsuite, test.stdout);
-      };
+      }
     })();
-    
 
     testData[problem] = normalizeName(problem);
-  };
+  }
 
   return { testData, problemData };
 };

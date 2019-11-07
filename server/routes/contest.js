@@ -9,8 +9,7 @@ const md = new require("markdown-it")();
 
 const router = require("express").Router();
 
-router.get("/", 
-  (req, res) =>
+router.get("/", (req, res) =>
   renderWithPopups(req, res, "pages/contest/index", {
     problems: loadProblems(),
     name: req.session.username,
@@ -28,7 +27,8 @@ router.get("/scoreboard", (req, res) =>
 const sampleDir = __rootdir + "/problems/sample/Hello Woooorld/solution";
 router.use("/about/samples", require("express").static(sampleDir));
 
-const samples = fs.readdirSync(sampleDir)
+const samples = fs
+  .readdirSync(sampleDir)
   .filter(name => !name.endsWith(".class"));
 
 router.get("/about", (req, res) =>

@@ -63,7 +63,7 @@ router.get("/scoreboard", (req, res) => {
             sub.time < correctTimes[sub.problem]
         )
         .forEach(sub => {
-          if(problemToConfig[sub.problem] !== undefined) {
+          if (problemToConfig[sub.problem] !== undefined) {
             score -= problemToConfig[sub.problem].penalty;
           }
         });
