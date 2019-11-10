@@ -10,8 +10,7 @@ const loadProblems = dir => {
   const { testData, problemData } = loadData(config, dir);
   return {
     testData,
-    problemData,
-    config
+    problemData
   };
 };
 
@@ -21,6 +20,16 @@ const normalizeName = name => {
     .replace(/\W/g, "")
     .toLowerCase();
   return norm.substring(Math.max(0, norm.length - 30), norm.length);
+};
+
+const loadDivisions = (config, problemName) => {
+  if (!config.divisions) return null;
+
+  const ret = [];
+  for (const division of Object.keys(config.divisions)) {
+    if (config.divisions[division].includes(problemName)) ret.push(division);
+  }
+  return ret;
 };
 
 const loadData = (config, dir) => {
@@ -44,17 +53,20 @@ const loadData = (config, dir) => {
 
     // Load problemData
     const statement = fs.readFileSync(problemDir + "/statement.txt", "utf8");
-    const config = Object.assign(
+    const problemConfig = Object.assign(
       {},
       defaultConf,
       fs.existsSync(problemDir + "/config.json")
         ? require(problemDir + "/config.json")
-        : {}
+        : {},
+      {
+        division: loadDivisions(config, problem)
+      }
     );
     const currProblemData = {
       name: problem,
       statement,
-      config
+      config: problemConfig
     };
     problemData.push(currProblemData);
 

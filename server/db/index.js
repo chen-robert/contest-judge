@@ -59,7 +59,7 @@ module.exports = {
         if (!res) {
           return callback("Incorrect username or password");
         }
-        return callback(null, { id: data.id });
+        return callback(null, { id: data.id, division: data.division });
       })
       .catch(err => handleError(err, callback));
   },

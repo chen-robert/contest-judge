@@ -66,7 +66,10 @@ addUser(
   process.env.ADMIN_PASSWORD || "ihsprogramming",
   "advanced",
   err => {
-    if (!err) console.log("Successfully created new admin user with password $ADMIN_PASSWORD");
+    if (!err)
+      console.log(
+        "Successfully created new admin user with password $ADMIN_PASSWORD"
+      );
   }
 );
 

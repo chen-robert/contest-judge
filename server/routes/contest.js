@@ -11,7 +11,7 @@ const router = require("express").Router();
 
 router.get("/", (req, res) =>
   renderWithPopups(req, res, "pages/contest/index", {
-    problems: loadProblems(),
+    problems: loadProblems(req.session.division),
     name: req.session.username,
     md,
     languages

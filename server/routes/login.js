@@ -31,6 +31,7 @@ router.post("/", (req, res) => {
       }
 
       req.session.uid = data.id;
+      req.session.division = data.division;
       req.session.username = username;
 
       return res.redirect("/contest");
