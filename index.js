@@ -60,14 +60,13 @@ app.use("/admin", require(__rootdir + "/server/routes/admin.js"));
 
 const { addUser } = require(__rootdir + "/server/db");
 
-console.log("Attempting to create admin user");
 addUser(
   "admin",
   "admin",
   process.env.ADMIN_PASSWORD || "ihsprogramming",
   "advanced",
   err => {
-    if (!err) console.log("Created new admin user");
+    if (!err) console.log("Successfully created new admin user with password $ADMIN_PASSWORD");
   }
 );
 

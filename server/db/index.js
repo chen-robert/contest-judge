@@ -6,7 +6,6 @@ const client = new Client({ connectionString });
 client.connect();
 
 const handleError = (err, callback) => {
-  console.error(err);
   callback(err);
 };
 
