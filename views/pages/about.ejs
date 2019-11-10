@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <% include ../partials/main-header %>
+    <% include ../partials/main-navbar.ejs %>
+  </head>
+  <body>
+    <% include ../partials/popup %>
+    <section class="header header__small">
+      <div class="header--title">
+        <div class="title--main">About Us</div>
+      </div>
+    </section>
+    <% 
+    function shuffle(arr) {
+      for(let i = 0; i < arr.length; i++){
+        const idx = i + Math.floor(Math.random() * (arr.length - i));
+        const tmp = arr[idx];
+        arr[idx] = arr[i];
+        arr[i] = tmp;
+      }
+      return arr;
+    }
+    %>
+    <main class="content">
+      <% shuffle(people).forEach(({name, desc}) => { %>
+      <section class="content--body">
+        <p class="body--title"><%= name %></p>
+        <%= desc %>       
+      </section>
+      <% }) %>
+    </main>
+  </body>
+</html>

@@ -21,12 +21,15 @@ const enforceAdmin = require(__rootdir + "/server/enforceAdmin.js");
 const app = express();
 app.set("view engine", "ejs");
 
+// Static assets
 app.use(lessMiddleware(__dirname + "/public"));
 app.use(express.static(__dirname + "/public"));
 
+// Security
 app.use(xssFilter());
 app.disable("x-powered-by");
 
+// Parsing and cookies
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(
   cookieSession({
@@ -37,6 +40,9 @@ app.use(
 );
 
 app.get("/", (req, res) => res.render("pages/index"));
+app.get("/about", (req, res) => res.render("pages/about", {
+  people: config.about
+}))
 
 // Public routes
 app.use("/login", require(__rootdir + "/server/routes/login.js"));
