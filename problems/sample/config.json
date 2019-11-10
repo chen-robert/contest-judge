@@ -5,6 +5,7 @@
   "default": {
     "value": 50,
     "penalty": 0,
-    "sample": false
+    "sample": false,
+    "author": "Robert Chen"
   }
 }

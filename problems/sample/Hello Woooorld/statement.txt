@@ -1,4 +1,4 @@
-Samuel is learning programming. Help him with a very simple task!
+Sherry is learning programming. Help her with a very simple task!
 
 ## Input Format
 One integer $N$, $(1 \leq N \leq 100,000)$. 

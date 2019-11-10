@@ -39,7 +39,9 @@ app.use(
   })
 );
 
-app.get("/", (req, res) => res.render("pages/index"));
+app.get("/", (req, res) => res.render("pages/index", {
+  config: config.index
+}))
 app.get("/about", (req, res) => res.render("pages/about", {
   people: config.about
 }))
