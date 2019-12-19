@@ -2,14 +2,13 @@
   "startTime": "Mon Jun 03 2019 20:20:00 GMT-0700 (Pacific Daylight Time)",
   "endTime": "Wed Jul 03 2019 20:20:00 GMT-0700 (Pacific Daylight Time)",
   "problemDirs": [
-    "/problems/sample",
-    "/problems/ipc-problems"
+    "/problems/sample"
   ],
   "languages": [
     "java",
     "javascript",
     "c",
-    "c++",
+    "c++17",
     "c#",
     "python"
   ],
@@ -17,8 +16,8 @@
   ],
   "index": {
     "location": {
-      "name": "Interlake High School",
-      "url": "https://www.google.com/maps/place/Interlake+High+School/@47.6289376,-122.1262297,17z/data=!3m1!4b1!4m5!3m4!1s0x54906da201112251:0xefc929dd1c0ff5c3!8m2!3d47.628934!4d-122.124041"
+      "name": "Your High School",
+      "url": "#"
     }
   }
 }

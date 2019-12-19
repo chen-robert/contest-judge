@@ -13,6 +13,9 @@ public/styles/*.css
 problems/*
 !problems/sample
 
+# Config
+config.json
+
 # Used in problem generation
 **/generated
 *.class
