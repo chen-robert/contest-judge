@@ -17,7 +17,14 @@
   "index": {
     "location": {
       "name": "Your High School",
-      "url": "#"
-    }
+      "url": ""
+    },
+    "sponsors": [
+      {
+        "url": "",
+        "desc": "",
+        "img": ""
+      }
+    ]
   }
 }

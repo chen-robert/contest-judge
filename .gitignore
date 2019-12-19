@@ -8,6 +8,7 @@ uploads
 
 # Less files get compiled into css files. Ignore these.
 public/styles/*.css
+public/sponsors
 
 # Problems
 problems/*

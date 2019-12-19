@@ -28,6 +28,13 @@
       </section>
       <section class="content--body">
         <p class="body--title">Sponsors</p>
+        <% config.sponsors.forEach(sponsor => { %>
+          <div class="sponsor sponsor__used">
+            <a href="<%= sponsor.url %>" class="sponsor--link">
+              <img src="<%= sponsor.img %>" title="<%= sponsor.desc || "" %>">
+            </a>
+          </div>
+        <% }) %>
         <div class="sponsor">
           <p>Your Logo Here</p>
         </div>
