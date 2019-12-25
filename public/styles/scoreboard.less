@@ -16,8 +16,13 @@
   }
 
   & tbody tr {
-    &:hover {
+    &.hoverable:hover {
       background-color: #eee;
+      cursor: pointer;
+    }
+
+    &.hoverable {
+      background-color: #f7f7f7;
     }
   }
 }

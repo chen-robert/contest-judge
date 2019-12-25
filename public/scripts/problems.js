@@ -38,20 +38,33 @@ $(() => {
   });
 });
 
-const submission = ({ problem, status }) => `
-<tr>
-  <td>${problem}</td>
-  <td>${status}</td>
-</tr>
-`;
+const submission = ({ problem, status }) => {
+  const msg = status.split("\n").slice(1).join("\n").trim();
+  status = status.split("\n")[0].trim();
+
+  const $elem = $(`
+  <tr>
+    <td>${problem}</td>
+    <td>${status}</td>
+  </tr>
+  `);
+
+  if(msg.length !== 0) $elem.addClass("hoverable");
+
+  $elem.click(() => {
+    if(msg.length !== 0) alert(msg);
+  });
+  return $elem;
+}
 
 const updateSubmissions = () => {
   $.get("/grader/submissions").then(subs => {
-    $("#submissions").html(
+    $("#submissions").empty();
+    
+    $("#submissions").append(
       subs
         .sort((a, b) => b.time - a.time)
         .map(sub => submission(sub))
-        .join("\n")
     );
 
     subs

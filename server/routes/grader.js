@@ -37,7 +37,7 @@ const execLimits = {
 const status = body => {
   if (body.compile) {
     if (body.compile.err) {
-      return "COMPILE_ERROR";
+      return "COMPILE_ERROR" + "\n" + body.compile.stdout;
     }
   }
 
@@ -115,48 +115,52 @@ router.post(
         const data = fs.readFileSync(req.file.path, "utf8");
 
         const time = startGrading(req.session.uid, pid);
+        
+        if(data.length !== 0) {
+          if (!submissions[req.session.uid]) submissions[req.session.uid] = [];
+          const oldIndex = submissions[req.session.uid].length;
+          submissions[req.session.uid].push(
+            submissionData(req.session.uid, pid, "GRADING", time)
+          );
 
-        if (!submissions[req.session.uid]) submissions[req.session.uid] = [];
-        const oldIndex = submissions[req.session.uid].length;
-        submissions[req.session.uid].push(
-          submissionData(req.session.uid, pid, "GRADING", time)
-        );
-
-        request(
-          {
-            method: "POST",
-            body: {
-              lang: lang,
-              source: data,
-              filename: req.file.originalname,
-              compileOpts: compileLimits,
-              executeOpts: execLimits,
-              grader: "default",
-              testsuite: tests
+          request(
+            {
+              method: "POST",
+              body: {
+                lang: lang,
+                source: data,
+                filename: req.file.originalname,
+                compileOpts: compileLimits,
+                executeOpts: execLimits,
+                grader: "default",
+                testsuite: tests
+              },
+              json: true,
+              url: `${api}/run`
             },
-            json: true,
-            url: `${api}/run`
-          },
-          (err, response, body) => {
-            let code;
-            if (err) {
-              code = "ENDPOINT_ERROR";
-              console.log(err);
-            } else {
-              code = status(body);
+            (err, response, body) => {
+              let code;
+              if (err) {
+                code = "ENDPOINT_ERROR";
+                console.log(err);
+              } else {
+                code = status(body);
+              }
+
+              submissions[req.session.uid][oldIndex] = submissionData(
+                req.session.uid,
+                pid,
+                code,
+                time
+              );
+              finishGrading(req.session.uid, time, pid, code);
             }
+          );
 
-            submissions[req.session.uid][oldIndex] = submissionData(
-              req.session.uid,
-              pid,
-              code,
-              time
-            );
-            finishGrading(req.session.uid, time, pid, code);
-          }
-        );
-
-        req.session.message = "Successfully submitted";
+          req.session.message = "Successfully submitted";
+        } else {
+          req.session.error = "File is empty";
+        }
       }
       return res.redirect("/contest#" + pid.toLowerCase().replace(/ /g, "-"));
     });
