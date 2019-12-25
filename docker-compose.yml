@@ -10,6 +10,9 @@ services:
       - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD}@db:5432/contest
       - SECRET=${SECRET}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+    volumes:
+      - ./config.json:/app/config.json
+      - ./problems:/app/problems
     expose: 
       - 8000
     restart: always

@@ -2,3 +2,7 @@ node_modules
 npm-debug.log
 
 .git
+
+# Attached as a volume
+config.json
+problems
