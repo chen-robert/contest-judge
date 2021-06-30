@@ -7,7 +7,13 @@ const { getAllSolves } = require(__rootdir + "/server/db");
 
 router.get("/scoreboard", (req, res) => {
   getAllSolves(rows => {
+    if(!rows.filter) console.log(rows)
     rows = rows.filter(({ time }) => time < new Date(config.endTime).getTime());
+
+    const problemToConfig = {};
+    problemData.forEach(
+      problem => (problemToConfig[problem.name] = problem.config)
+    );
 
     const subs = rows.map(row => {
       const data = {
@@ -20,7 +26,9 @@ router.get("/scoreboard", (req, res) => {
       };
 
       return data;
-    });
+    })
+      .filter(({ problem }) => problemToConfig[problem] !== undefined)
+      .filter(({ username }) => username !== 'admin')
 
     const isUnique = (val, index, self) => self.indexOf(val) === index;
     const users = subs.map(sub => sub.uid).filter(isUnique);
@@ -36,10 +44,6 @@ router.get("/scoreboard", (req, res) => {
     const calculateScore = uid => {
       let score = 0;
 
-      const problemToConfig = {};
-      problemData.forEach(
-        problem => (problemToConfig[problem.name] = problem.config)
-      );
 
       const correctTimes = {};
       subs
